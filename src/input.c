@@ -1,5 +1,2 @@
-#include<stdio.h>
-int main(){
-    printf("Hello Everyone\n");
-    return 0;
-}
+int x;
+x = 3 + 4;
