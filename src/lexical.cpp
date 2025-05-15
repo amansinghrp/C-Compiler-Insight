@@ -1,14 +1,16 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
 
 enum tokenType {
-    keyword,    //0
-    identifier, //1
-    number,     //2
-    operaTor,   //3
-    separator,  //4
-    stringtype, //5
-    unknown     //6
+    keyword,        // 0
+    identifier,     // 1
+    number,         // 2
+    operaTor,       // 3
+    separator,      // 4
+    stringtype,     // 5  (your old string-literal for "foo")
+    preprocessor,   // 6  (#include, #define, etc.)
+    string_literal, // 7  (<foo.h> or "foo.h")
+    unknown         // 8
 };
 
 struct token {
@@ -18,136 +20,157 @@ struct token {
     int col;
 };
 
-unordered_set<string>keywords = {"int","float","double","long long","char","bool","string","if","else","for","while","true","false","return",
-                                "void","break","continue","switch","case","default","cout","cin","main"
+unordered_set<string> keywords = {
+    "int","float","double","long long","char","bool","string",
+    "if","else","for","while","true","false","return",
+    "void","break","continue","switch","case","default",
+    "cout","cin"
+};
+unordered_set<char> operators = {
+    '+','-','*','/','=','%','&','|','<','>','!','^'
+};
+unordered_set<char> separators = {
+    '{','}','[',']','(',')',',',':',';'
 };
 
-unordered_set<char>operators = {'+','-','*','/','=','%','&','|','<','>','!','^'};
-
-unordered_set<char>separators = {'{' , '}' , ',' , '[' , ']' , '(' , ')' , ':' , ';' };
-
 bool isNumber(const string &str) {
-    return regex_match(str,regex("-?([0-9]+(\\.[0-9]+)?|\\.[0-9]+)"));
+    return regex_match(str, regex("-?([0-9]+(\\.[0-9]+)?|\\.[0-9]+)"));
 }
-
-bool isIdentitfier(const string& str) {
-    return regex_match(str,regex("[_a-zA-Z]+[_a-zA-Z0-9]*"));
+bool isIdentifier(const string& str) {
+    return regex_match(str, regex("[_a-zA-Z]+[_a-zA-Z0-9]*"));
 }
 
 vector<token> tokenize(const string &code) {
-    vector<token>tokens;
-    int i=0;
-    int len = code.length();
-    int line = 1;
-    int column = 1;
-    while(i < len) {
+    vector<token> tokens;
+    int i = 0, len = code.size();
+    int line = 1, col = 1;
+
+    while (i < len) {
         char c = code[i];
-        //Ignore spaces
-        if(isspace(c)) {
-            if(c == '\n') {
-                line++;
-                column = 1;
-            }
-            else {
-                column++;
-            }
+
+        // Whitespace
+        if (isspace(c)) {
+            if (c == '\n') { line++; col = 1; }
+            else col++;
             i++;
             continue;
         }
 
-        //Ignore single line comments
-        if(c == '/' && i+1<len && code[i+1] =='/') {
-            i+=2;
-            while(i < len && code[i] != '\n')
-                i++;
-            line++;
-            column = 1;
-            i++;
-            continue;
-        }
+        // Preprocessor directive
+        if (c == '#') {
+            int startCol = col;
+            // consume '#'
+            string dir = "#";
+            i++; col++;
+            // directive name
+            while (i < len && isalpha(code[i])) {
+                dir += code[i++];
+                col++;
+            }
+            tokens.push_back({preprocessor, dir, line, startCol});
 
-        //Ignore multiline comments
-        if(c == '/' && i+1<len && code[i+1] == '*') {
-            i+=2;
-            column+=2;
-            while(i+1<len && code[i] != '*' && code[i+1] != '/') {
-                if(code[i] == '\n') {
-                    line++;
-                    column = 1;
+            // skip whitespace
+            while (i < len && isspace(code[i])) {
+                if (code[i] == '\n') break;
+                i++; col++;
+            }
+
+            // header <...> or "..."
+            if (i < len && code[i] == '<') {
+                string hdr = "<"; i++; col++;
+                while (i < len && code[i] != '>') {
+                    hdr += code[i++]; col++;
                 }
-                else
-                    column++;
+                if (i < len && code[i] == '>') { hdr += '>'; i++; col++; }
+                tokens.push_back({string_literal, hdr, line, col - hdr.size()});
             }
-            i+=2;
-            column+=2;
+            else if (i < len && code[i] == '"') {
+                string hdr = "\""; i++; col++;
+                while (i < len && code[i] != '"') {
+                    hdr += code[i++]; col++;
+                }
+                if (i < len && code[i] == '"') { hdr += '"'; i++; col++; }
+                tokens.push_back({string_literal, hdr, line, col - hdr.size()});
+            }
+            // skip to end of line
+            while (i < len && code[i] != '\n') { i++; }
             continue;
-        } 
+        }
 
-        //Now start generating tokens
-        //Identifing string literals
-        if(c == '"') {
-            i++;
-            int start = i;
-            while(i < len && code[i] != '"') 
+        // Single-line comment
+        if (c == '/' && i+1<len && code[i+1]=='/') {
+            while (i<len && code[i]!='\n') i++;
+            continue;
+        }
+        // Multi-line comment
+        if (c=='/' && i+1<len && code[i+1]=='*') {
+            i+=2; 
+            while (i+1<len && !(code[i]=='*'&&code[i+1]=='/')) {
+                if (code[i]=='\n') { line++; col=1; }
+                else col++;
                 i++;
-            i++;
-            tokens.push_back({tokenType::stringtype,code.substr(start,i-start-1),line,column});
-            column += (i-start);
+            }
+            i+=2; 
             continue;
         }
 
-        //Identifying operators
-        if(operators.count(c)) {
-            tokens.push_back({tokenType::operaTor,string(1,c),line,column});
-            column++;
-            i++;
+        // String literal (old style "foo")
+        if (c == '"') {
+            int startCol = col;
+            string lit = "\""; i++; col++;
+            while (i<len && code[i]!='"') { lit += code[i++]; col++; }
+            if (i<len && code[i]=='"') { lit += '"'; i++; col++; }
+            tokens.push_back({stringtype, lit, line, startCol});
             continue;
         }
 
-        //Identifying separators
-        if(separators.count(c)) {
-            tokens.push_back({tokenType::separator,string(1,c),line,column});
-            column++;
-            i++;
+        // Operators
+        if (operators.count(c)) {
+            tokens.push_back({operaTor, string(1, c), line, col});
+            i++; col++;
+            continue;
+        }
+        // Separators
+        if (separators.count(c)) {
+            tokens.push_back({separator, string(1, c), line, col});
+            i++; col++;
             continue;
         }
 
-        //Identifying numbers,identifiers,keywords
-        if(isalnum(c) || c == '_' || c == '.') {
-            int start = i;
-            while(i < len && (isalnum(code[i]) || code[i] =='_' || code[i] == '.'))
-                i++;
-            string val = code.substr(start,i-start);
-            tokenType type;
-            if(keywords.count(val))
-                type = tokenType::keyword;
-            else if(isNumber(val))
-                type = tokenType::number;
-            else if(isIdentitfier(val))
-                type = tokenType::identifier;
-            else
-                type = tokenType::unknown;
-            tokens.push_back({type,val,line,column});
-            column += (i-start);
+        // Numbers, identifiers, keywords
+        if (isalnum(c) || c=='_' || c=='.') {
+            int start = i, startCol = col;
+            while (i<len && (isalnum(code[i])||code[i]=='_'||code[i]=='.')) {
+                i++; col++;
+            }
+            string tok = code.substr(start, i-start);
+            tokenType t;
+            if (keywords.count(tok))                 t = keyword;
+            else if (isNumber(tok))                  t = number;
+            else if (isIdentifier(tok))              t = identifier;
+            else                                      t = unknown;
+            tokens.push_back({t, tok, line, startCol});
             continue;
         }
 
-        //if anything else is found then unknown
-        tokens.push_back({tokenType::unknown,string(1,c),line,column});
-        i++;
-        column++;
-    } 
+        // Anything else
+        tokens.push_back({unknown, string(1, c), line, col});
+        i++; col++;
+    }
+
     return tokens;
 }
 
 string tokenToString(tokenType t) {
-    switch(t) {
-        case keyword:return "Keyword   ";
-        case identifier:return "Identifier";
-        case number:return "Number   ";
-        case operaTor:return "Operator";
-        case separator:return "Separator";
-        case stringtype:return "String   ";
-        default:return "Unknown";
+    switch (t) {
+        case keyword:      return "Keyword   ";
+        case identifier:   return "Identifier";
+        case number:       return "Number    ";
+        case operaTor:     return "Operator  ";
+        case separator:    return "Separator ";
+        case stringtype:   return "String    ";
+        case preprocessor: return "Preproc   ";
+        case string_literal: return "HdrLit   ";
+        default:           return "Unknown   ";
     }
 }

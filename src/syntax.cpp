@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include "lexical.cpp" // Include your lexer
+#include "lexical.cpp" // Include your lexer definitions
 
 class Parser {
     vector<token> tokens;
@@ -11,187 +11,184 @@ public:
     Parser(const vector<token>& t) : tokens(t) {}
 
     void parse() {
-        while (!isAtEnd()) {
-            statement();
-        }
-        cout << "Syntax Analysis Successful.\n";
+        program();
+        cout << "Parsing completed successfully.\n";
     }
 
 private:
-    token peek() {
-        return current < tokens.size() ? tokens[current] : token{unknown, "", -1, -1};
-    }
-
-    token advance() {
-        return tokens[current++];
-    }
-
-    bool match(tokenType type, const string& val = "") {
-        if (current >= tokens.size()) return false;
-        if (tokens[current].type == type && (val.empty() || tokens[current].value == val)) {
-            current++;
-            return true;
+    // Entry point for parsing
+    void program() {
+        // Skip any preprocessor directives
+        while (check(preprocessor)) {
+            preprocessorDirective();
         }
-        return false;
+        // Parse a series of external declarations
+        while (!isAtEnd()) {
+            externalDeclaration();
+        }
     }
 
-    bool check(tokenType type, const string& val = "") {
-        if (isAtEnd()) return false;
-        return tokens[current].type == type && (val.empty() || tokens[current].value == val);
+    // Handle either function definitions or global declarations
+    void externalDeclaration() {
+        if (check(keyword) && (peek().value == "int" || peek().value == "float" || peek().value == "char" || peek().value == "bool" || peek().value == "void")) {
+            // Look ahead: type ID (
+            if (checkNext(identifier) && checkNextNext(separator, "(")) {
+                functionDefinition();
+                return;
+            }
+        }
+        // Otherwise treat as a global variable declaration
+        declaration();
+        expect(separator, ";", "Expected ';' after declaration.");
     }
 
-    bool isAtEnd() {
-        return current >= tokens.size();
+    // Parse a function definition: returnType name(params) { ... }
+    void functionDefinition() {
+        advance(); // return type
+        if (!match(identifier)) error("Expected function name.");
+        expect(separator, "(", "Expected '(' after function name.");
+        parameterList();
+        expect(separator, ")", "Expected ')' after parameters.");
+        compoundStatement();
     }
 
-    void error(const string& msg) {
-        token t = peek();
-        cerr << "Syntax Error at line " << t.line << ", column " << t.col << ": " << msg << "\n";
-        exit(1);
+    // Parse function parameters
+    void parameterList() {
+        if (check(separator, ")")) return; // no parameters
+        do {
+            // Expect a type then an identifier
+            if (!(match(keyword, "int") || match(keyword, "float") || match(keyword, "char") || match(keyword, "bool") || match(keyword, "void")))
+                error("Expected parameter type.");
+            if (!match(identifier)) error("Expected parameter name.");
+        } while (match(separator, ","));
     }
 
-    // <statement> → <declaration> ; | <assignment> ; | <if_stmt> | <while_stmt> | <for_stmt>
+    // Parse a block { ... }
+    void compoundStatement() {
+        expect(separator, "{", "Expected '{' to start block.");
+        while (!check(separator, "}")) {
+            if (isAtEnd()) error("Expected '}' to close block.");
+            statement();
+        }
+        expect(separator, "}", "Expected '}' after block.");
+    }
+
+    // Skip a preprocessor directive
+    void preprocessorDirective() {
+        advance(); // '#' token
+        // Skip all tokens on this line
+        int startLine = tokens[current - 1].line;
+        while (!isAtEnd() && peek().line == startLine) advance();
+    }
+
+    // Parse a statement
     void statement() {
+        // Block
+        if (check(separator, "{")) {
+            compoundStatement();
+            return;
+        }
+        // Declaration
         if (check(keyword, "int") || check(keyword, "float") || check(keyword, "char") || check(keyword, "bool")) {
             declaration();
-            expect(";", "Expected ';' after declaration.");
+            expect(separator, ";", "Expected ';' after declaration.");
         }
+        // Selection
         else if (check(keyword, "if")) {
-            if_stmt();
+            ifStatement();
         }
+        // Iteration
         else if (check(keyword, "while")) {
-            while_stmt();
+            whileStatement();
         }
         else if (check(keyword, "for")) {
-            for_stmt();
+            forStatement();
         }
-        else if (check(identifier)) {
-            assignment();
-            expect(";", "Expected ';' after assignment.");
-        }
+        // Expression statement
         else {
-            error("Unknown statement");
+            expression();
+            expect(separator, ";", "Expected ';' after expression.");
         }
     }
 
-    // <declaration> → <type> ID [= <expression>]
-   // <declaration> → <type> ID [= <expression>]
     void declaration() {
-        type();
+        advance(); // type
         if (!match(identifier)) error("Expected identifier in declaration.");
         if (match(operaTor, "=")) {
             expression();
         }
     }
 
-    // <assignment> → ID = <expression>
-    void assignment() {
-        if (!match(identifier)) error("Expected identifier in assignment.");
-        expect("=", "Expected '=' in assignment.");
+    void ifStatement() {
+        advance(); // 'if'
+        expect(separator, "(", "Expected '(' after 'if'.");
         expression();
-    }
-
-    // <type> → int | float | char | bool
-    void type() {
-        if (!(match(keyword, "int") || match(keyword, "float") ||
-              match(keyword, "char") || match(keyword, "bool"))) {
-            error("Expected type (int, float, char, bool).");
-        }
-    }
-
-    // <if_stmt> → if ( <expression> ) <statement> [else <statement>]
-    void if_stmt() {
-        match(keyword, "if");
-        expect("(", "Expected '(' after 'if'.");
-        comparison();
-        expect(")", "Expected ')' after condition.");
+        expect(separator, ")", "Expected ')' after condition.");
         statement();
-        if (match(keyword, "else")) {
-            statement();
-        }
+        if (match(keyword, "else")) statement();
     }
 
-    // <while_stmt> → while ( <expression> ) <statement>
-    void while_stmt() {
-        match(keyword, "while");
-        expect("(", "Expected '(' after 'while'.");
-        comparison();
-        expect(")", "Expected ')' after condition.");
-        statement();
-    }
-
-    // <for_stmt> → for ( <assignment> ; <expression> ; <assignment> ) <statement>
-    void for_stmt() {
-        match(keyword, "for");
-        expect("(", "Expected '(' after 'for'.");
-        assignment();
-        expect(";", "Expected ';' after init assignment.");
-        comparison();
-        expect(";", "Expected ';' after loop condition.");
-        assignment();
-        expect(")", "Expected ')' after increment.");
-        statement();
-    }
-
-    // <comparison> → <expression> [ ("<" | ">" | "<=" | ">=" | "==" | "!=") <expression> ]
-    void comparison() {
+    void whileStatement() {
+        advance(); // 'while'
+        expect(separator, "(", "Expected '(' after 'while'.");
         expression();
-        while (match(operaTor, "<") || match(operaTor, ">") ||
-            match(operaTor, "==") || match(operaTor, "!=") ||
-            match(operaTor, "<=") || match(operaTor, ">=")) {
-            expression(); // right-hand side
-        }
+        expect(separator, ")", "Expected ')' after condition.");
+        statement();
     }
 
-
-    // <expression> → <term> { (+|-) <term> }
-    void expression() {
-        term();
-        while (match(operaTor, "+") || match(operaTor, "-")) {
-            term();
-        }
+    void forStatement() {
+        advance(); // 'for'
+        expect(separator, "(", "Expected '(' after 'for'.");
+        if (!check(separator, ";")) expression();
+        expect(separator, ";", "Expected ';' after init in 'for'.");
+        if (!check(separator, ";")) expression();
+        expect(separator, ";", "Expected ';' after condition in 'for'.");
+        if (!check(separator, ")")) expression();
+        expect(separator, ")", "Expected ')' after increment in 'for'.");
+        statement();
     }
 
-    // <term> → <factor> { (*|/) <factor> }
-    void term() {
-        factor();
-        while (match(operaTor, "*") || match(operaTor, "/")) {
-            factor();
-        }
-    }
-
-    // <factor> → NUMBER | ID | ( <expression> )
+    // Expression grammar (recursive descent)
+    void expression() { logicalOr(); }
+    void logicalOr() { logicalAnd(); while (match(operaTor, "||")) logicalAnd(); }
+    void logicalAnd() { equality(); while (match(operaTor, "&&")) equality(); }
+    void equality() { relational(); while (match(operaTor, "==") || match(operaTor, "!=")) relational(); }
+    void relational() { additive(); while (match(operaTor, ">") || match(operaTor, "<") || match(operaTor, ">=") || match(operaTor, "<=")) additive(); }
+    void additive() { term(); while (match(operaTor, "+") || match(operaTor, "-")) term(); }
+    void term() { factor(); while (match(operaTor, "*") || match(operaTor, "/")) factor(); }
     void factor() {
-        if (match(number) || match(identifier)) {
-            return;
-        }
-        if (match(separator, "(")) {
-            expression();
-            expect(")", "Expected ')' after expression.");
-            return;
-        }
-        error("Expected number, identifier or '('");
+        if (match(number) || match(identifier)) return;
+        if (match(separator, "(")) { expression(); expect(separator, ")", "Expected ')' after expression."); return; }
+        error("Expected number, identifier, or '('.");
     }
 
-    void expect(const string& symbol, const string& errMsg) {
-        if (!match(operaTor, symbol) && !match(separator, symbol)) {
-            error(errMsg);
-        }
-    }
+    // Utility methods
+    token peek() { return !isAtEnd() ? tokens[current] : token{unknown, "", -1, -1}; }
+    bool isAtEnd() { return current >= tokens.size(); }
+    token advance() { return tokens[current++]; }
+    bool match(tokenType t, const string& v = "") { if (check(t, v)) { current++; return true; } return false; }
+    bool check(tokenType t, const string& v = "") { return !isAtEnd() && tokens[current].type == t && (v.empty() || tokens[current].value == v); }
+    bool checkNext(tokenType t) { return current + 1 < tokens.size() && tokens[current + 1].type == t; }
+    bool checkNextNext(tokenType t, const string& v) { return current + 2 < tokens.size() && tokens[current + 2].type == t && tokens[current + 2].value == v; }
+    void expect(tokenType t, const string& v, const string& msg) { if (!match(t, v)) error(msg); }
+    void error(const string& msg) { token t = peek(); cerr << "Syntax Error at line " << t.line << ", column " << t.col << ": " << msg << "\n"; exit(1); }
 };
 
 int main() {
     ifstream file("input.cpp");
-    if (!file.is_open()) {
-        cerr << "Error opening file" << endl;
-        return 1;
+    if (!file) { cerr << "Error opening input file\n"; return 1; }
+    string code((istreambuf_iterator<char>(file)), {});
+    // vector<token> tokens = tokenize(code);
+    auto tokens = tokenize(code);
+    for (auto &tk : tokens) {
+        cout << tokenToString(tk.type) 
+            << " ('" << tk.value << "')  "
+            << "line " << tk.line 
+            << ", col " << tk.col 
+            << '\n';
     }
-
-    string code((istreambuf_iterator<char>(file)), istreambuf_iterator<char>());
-    vector<token> tokens = tokenize(code);
 
     Parser parser(tokens);
     parser.parse();
-
     return 0;
 }
