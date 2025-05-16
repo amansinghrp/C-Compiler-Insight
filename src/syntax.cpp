@@ -83,33 +83,41 @@ private:
 
     // Parse a statement
     void statement() {
-        // Block
         if (check(separator, "{")) {
             compoundStatement();
             return;
         }
-        // Declaration
         if (check(keyword, "int") || check(keyword, "float") || check(keyword, "char") || check(keyword, "bool")) {
             declaration();
             expect(separator, ";", "Expected ';' after declaration.");
         }
-        // Selection
         else if (check(keyword, "if")) {
             ifStatement();
         }
-        // Iteration
         else if (check(keyword, "while")) {
             whileStatement();
         }
         else if (check(keyword, "for")) {
             forStatement();
         }
-        // Expression statement
+        else if (check(keyword, "return")) {
+            returnStatement();  
+        }
         else {
             expression();
             expect(separator, ";", "Expected ';' after expression.");
         }
     }
+
+    void returnStatement() {
+        advance(); // consume 'return'
+        // Allow empty return (like in void functions) or return with expression
+        if (!check(separator, ";")) {
+            expression();
+        }
+        expect(separator, ";", "Expected ';' after return statement.");
+    }
+
 
     void declaration() {
         advance(); // type
