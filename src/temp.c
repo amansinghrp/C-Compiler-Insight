@@ -1,4 +1,8 @@
+#include<stdio.h>
 int main(){
-printf("Hellow wolrd");
+int a = 10;
+if(a == 10{
+print("ok");
+
 return 0;
 }

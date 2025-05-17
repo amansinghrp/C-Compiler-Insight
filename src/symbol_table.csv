@@ -1,2 +1,5 @@
 SNo,Token,Attribute,AttributeNumber,MemoryLocation
 1,main(),Main Function,1,1000
+2,a,Identifier,2,1004
+3,print,Identifier,3,1008
+4,ok,Identifier,4,1012

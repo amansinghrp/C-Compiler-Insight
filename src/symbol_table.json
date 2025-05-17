@@ -5,5 +5,26 @@
     "Attribute": "Main Function",
     "AttributeNumber": 1,
     "MemoryLocation": 1000
+  },
+  {
+    "SNo": 2,
+    "Token": "a",
+    "Attribute": "Identifier",
+    "AttributeNumber": 2,
+    "MemoryLocation": 1004
+  },
+  {
+    "SNo": 3,
+    "Token": "print",
+    "Attribute": "Identifier",
+    "AttributeNumber": 3,
+    "MemoryLocation": 1008
+  },
+  {
+    "SNo": 4,
+    "Token": "ok",
+    "Attribute": "Identifier",
+    "AttributeNumber": 4,
+    "MemoryLocation": 1012
   }
 ]

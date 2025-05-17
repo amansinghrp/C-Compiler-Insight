@@ -6,46 +6,85 @@
     <link rel="stylesheet" href="/static/style.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 30px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 40px;
+            background-color: #f0f4f8;
+            color: #222;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2c3e50;
         }
 
         textarea {
             width: 100%;
-            height: 300px;
-            font-family: monospace;
-            font-size: 14px;
+            min-height: 400px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 15px;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            background-color: #fff;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+            resize: vertical;
         }
 
         button {
             margin: 10px 10px 20px 0;
-            padding: 10px 15px;
-            font-size: 14px;
+            padding: 10px 18px;
+            font-size: 15px;
             cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #3498db;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2980b9;
         }
 
         pre {
-            background-color: #f5f5f5;
-            padding: 10px;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            border-radius: 5px;
             white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 14px;
         }
 
         .section {
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: #34495e;
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
-    <h1>C Compiler Insights</h1>
+    <h1>💻 C Compiler Insights</h1>
 
     <div class="section">
-        <label for="code">Enter your C code below:</label>
+        <label for="code"><strong>Enter your C code below:</strong></label>
         <textarea id="code" placeholder="Write your C code here..."></textarea>
     </div>
 
     <div class="section">
-        <button onclick="runLexical()">Lexical Analysis</button>
-        <button onclick="runSyntax()">Syntax Analysis</button>
+        <button onclick="runLexical()">🔍 Lexical Analysis</button>
+        <button onclick="runSyntax()">🧠 Syntax Analysis</button>
     </div>
 
     <div class="section">
