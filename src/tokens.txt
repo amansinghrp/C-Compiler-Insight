@@ -1,11 +1,15 @@
 int	Keyword	1
 main()	Main Function	1
 {	Special Character	1
-int	Keyword	2
-a	Identifier	2
-=	Operator	2
-5	Constant	2
+printf	Pre Defined Function	2
+(	Special Character	2
+"	Special Character	2
+Hellow	Identifier	2
+wolrd	Identifier	2
+"	Special Character	2
+)	Special Character	2
+;	Special Character	2
 return	Keyword	3
-a	Identifier	3
+0	Constant	3
 ;	Special Character	3
 }	Special Character	4

@@ -5,12 +5,5 @@
     "Attribute": "Main Function",
     "AttributeNumber": 1,
     "MemoryLocation": 1000
-  },
-  {
-    "SNo": 2,
-    "Token": "a",
-    "Attribute": "Identifier",
-    "AttributeNumber": 2,
-    "MemoryLocation": 1004
   }
 ]
