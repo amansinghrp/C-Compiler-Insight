@@ -2,8 +2,15 @@ alpha [A-Za-z]
 digit [0-9]
 und [_]
 space [ ]
+%option noyywrap
+%option noinput
+%option nounput
 
 %{
+#define PREPROC 51
+#include "symbol_table.h"  
+extern void generate_symbol_table();
+FILE *tokenFile;
 int yylineno;
 
 #define IF 1
@@ -76,6 +83,14 @@ int yylineno;
 %}
 
 %%
+
+^#include\s*<.*>    { printf("%s\tPreprocessor Directive\n", yytext); return HEAD; }
+^#define\s+[a-zA-Z_]+\s+.* { 
+    // Split into define, identifier, and value
+    printf("#define\tPreprocessor Directive\n");
+    // Extract identifier and value manually or using sub-rules
+    return DEF; 
+}
 \n	{yylineno++;}
 "main(void)" return MAINFUNC;
 "main()" return MAINFUNC;
@@ -152,226 +167,207 @@ struct row
 }r[100000];
 int main(void)
 {
-	int i=0,ptoken,h[20]={0},qline=0,qcnt=0,x=1000,j,k,y=0,b_c=0,b_o=0,c_o=0,c_c=0,d_o=0,d_c=0,ntoken, vtoken,rep=0;
+	tokenFile = fopen("tokens.txt", "w");  
+    if (!tokenFile) {
+        perror("Unable to create tokens.txt");
+        exit(EXIT_FAILURE);
+    }
+
+	int i=0, ptoken, h[20]={0}, qline=0, qcnt=0, x=1000, j, k, y=0, b_c=0, b_o=0, c_o=0, c_c=0, d_o=0, d_c=0, ntoken, vtoken, rep=0;
+	int mlc=0, slcline=0, mlcline;
+
 	ntoken = yylex();
 	printf("\n");
-	int mlc=0,slcline=0,mlcline;
+
 	while(ntoken) {
 		rep = 0;
-		if(yylineno==slcline)
-		{
-			ntoken=yylex();
+		if (yylineno == slcline) {
+			ntoken = yylex();
 			continue;
 		}
-		y=0;
-		for(k=0;k<i;k++)
-		{
-			if(!(strcmp(r[k].token,yytext)))
-			{
+		y = 0;
+		for (k = 0; k < i; k++) {
+			if (!(strcmp(r[k].token, yytext))) {
 				y = 1;
 				break;
-			}		
-		}	
-		if(y==1)
-			rep=1;
-		if(yylineno!=qline && qline!=0)
-		{
-			if(qcnt%2!=0)
-				printf("\n-------------ERROR ! INCOMPLETE STRING at Line %d------------------\n",qline);
-			qcnt=0;
+			}
 		}
-		if(b_c > b_o)
-			printf("ERROR ! UNMATCHED ')'\n");
-		if(c_c>c_o)
-			printf("ERROR ! UNMATCHED '}'\n");
-		if(d_c>d_o)
-			printf("ERROR ! UNMATCHED ']'\n");
-		if(rep==0 && ntoken!=48 && ntoken!=49 && ntoken!=50 && mlc==0 && qcnt%2==0)
-		{
-			r[i].sno=i+1;
-			strcpy(r[i].token,yytext);
+		if (y == 1)
+			rep = 1;
+
+		if (yylineno != qline && qline != 0) {
+			if (qcnt % 2 != 0)
+				printf("\n-------------ERROR ! INCOMPLETE STRING at Line %d------------------\n", qline);
+			qcnt = 0;
+		}
+		if (b_c > b_o) printf("ERROR ! UNMATCHED ')'\n");
+		if (c_c > c_o) printf("ERROR ! UNMATCHED '}'\n");
+		if (d_c > d_o) printf("ERROR ! UNMATCHED ']'\n");
+
+		if (rep == 0 && ntoken != 48 && ntoken != 49 && ntoken != 50 && mlc == 0 && qcnt % 2 == 0) {
+			r[i].sno = i + 1;
+			strcpy(r[i].token, yytext);
 			r[i].addr = x;
 		}
-		if(((ntoken>=1 && ntoken<=11) || ntoken==56) && mlc==0)
-		{
-			if(rep==0 && qcnt%2==0)
-			{
-				ptoken=0;
-				strcpy(r[i].attr,"KEYWORD");
+
+		if (((ntoken >= 1 && ntoken <= 11) || ntoken == 56) && mlc == 0) {
+			if (rep == 0 && qcnt % 2 == 0) {
+				ptoken = 0;
+				strcpy(r[i].attr, "Keyword");
 			}
-			printf("%s\t\tKeyword----------Line %d\n",yytext,yylineno);
+			printf("%s\t\tKeyword----------Line %d\n", yytext, yylineno);
+			fprintf(tokenFile, "%s\tKeyword\t%d\n", yytext, yylineno);
 		}
-		else if(ntoken==12 && mlc==0)
-		{
-			if(rep==0 && qcnt%2==0)
-			{
-				ptoken=1;
-				strcpy(r[i].attr,"ID");
+		else if (ntoken == 12 && mlc == 0) {
+			if (rep == 0 && qcnt % 2 == 0) {
+				ptoken = 1;
+				strcpy(r[i].attr, "Identifier");
 			}
-			printf("%s\t\tIdentifier----------Line %d\n",yytext,yylineno);
+			printf("%s\t\tIdentifier----------Line %d\n", yytext, yylineno);
+			fprintf(tokenFile, "%s\tIdentifier\t%d\n", yytext, yylineno);
 		}
-		else if(ntoken==13 && mlc==0)
-		{
-			if(rep==0 && qcnt%2==0)
-			{
-				ptoken=2;
-				strcpy(r[i].attr,"CONSTANT");
+		else if (ntoken == 13 && mlc == 0) {
+			if (rep == 0 && qcnt % 2 == 0) {
+				ptoken = 2;
+				strcpy(r[i].attr, "Constant");
 			}
-			printf("%s\t\tConstant----------Line %d\n",yytext,yylineno);
+			printf("%s\t\tConstant----------Line %d\n", yytext, yylineno);
+			fprintf(tokenFile, "%s\tConstant\t%d\n", yytext, yylineno);
 		}
-		else if(ntoken>=14 && ntoken<=32 && mlc==0)
-		{
-			if(rep==0 && qcnt%2==0)
-			{
-				ptoken=3;
-				strcpy(r[i].attr,"OPERATOR");
+		else if (ntoken >= 14 && ntoken <= 32 && mlc == 0) {
+			if (rep == 0 && qcnt % 2 == 0) {
+				ptoken = 3;
+				strcpy(r[i].attr, "Operator");
 			}
-			printf("%s\t\tOperator----------Line %d\n",yytext,yylineno);
+			printf("%s\t\tOperator----------Line %d\n", yytext, yylineno);
+			fprintf(tokenFile, "%s\tOperator\t%d\n", yytext, yylineno);
 		}
-		else if(ntoken>=33 && ntoken<=41 && mlc==0)
-		{
-			if(ntoken==41)
-			{
-				qcnt++;
-				qline=yylineno;
+		else if (ntoken >= 33 && ntoken <= 41 && mlc == 0) {
+			if (ntoken == 41) qcnt++, qline = yylineno;
+			if (ntoken == 34) b_o++;
+			if (ntoken == 35) b_c++;
+			if (ntoken == 36) c_o++;
+			if (ntoken == 37) c_c++;
+			if (ntoken == 38) d_o++;
+			if (ntoken == 39) d_c++;
+			if (rep == 0 && qcnt % 2 == 0) {
+				ptoken = 4;
+				strcpy(r[i].attr, "Special Character");
 			}
-			if(ntoken==34)
-				b_o++;
-			if(ntoken==35)
-				b_c++;
-			if(ntoken==36)
-				c_o++;
-			if(ntoken==37)
-				c_c++;
-			if(ntoken==38)
-				d_o++;
-			if(ntoken==39)
-				d_c++;
-			if(rep==0 && qcnt%2==0)
-			{	
-				ptoken=4;
-				strcpy(r[i].attr,"SPECIAL CHAR");
+			printf("%s\t\tSpecial Character----------Line %d\n", yytext, yylineno);
+			fprintf(tokenFile, "%s\tSpecial Character\t%d\n", yytext, yylineno);
+		}
+		else if (ntoken == 42 && mlc == 0) {
+			if (rep == 0 && qcnt % 2 == 0) {
+				ptoken = 5;
+				strcpy(r[i].attr, "Header");
 			}
-			printf("%s\t\tSpecial Character----------Line %d\n",yytext,yylineno);
+			printf("%s\t\tHeader----------Line %d\n", yytext, yylineno);
+			fprintf(tokenFile, "%s\tHeader\t%d\n", yytext, yylineno);
 		}
-		else if(ntoken==42 && mlc==0)
-		{
-			if(rep==0 && qcnt%2==0)
-			{
-				ptoken=5;
-				strcpy(r[i].attr,"HEADER");
-			}	
-			printf("%s\t\tHeader----------Line %d\n",yytext,yylineno);
-		}
-		else if(ntoken>=43 && ntoken<=44 && mlc==0)
-		{
-			if(rep==0 && qcnt%2==0)
-			{
-				ptoken=6;
-				strcpy(r[i].attr,"FORMAT SPECIFIER");
+		else if ((ntoken >= 43 && ntoken <= 44) && mlc == 0) {
+			if (rep == 0 && qcnt % 2 == 0) {
+				ptoken = 6;
+				strcpy(r[i].attr, "Format Specifier");
 			}
-			printf("%s\t\tFormat Specifier----------Line %d\n",yytext,yylineno);
+			printf("%s\t\tFormat Specifier----------Line %d\n", yytext, yylineno);
+			fprintf(tokenFile, "%s\tFormat Specifier\t%d\n", yytext, yylineno);
 		}
-		else if(ntoken>=45 && ntoken<=46 && mlc==0)
-		{
-			if(rep==0 && qcnt%2==0)
-			{
-				ptoken=12;
-				strcpy(r[i].attr,"VARIABLE LOCATION");
+		else if ((ntoken == 45 || ntoken == 46) && mlc == 0) {
+			if (rep == 0 && qcnt % 2 == 0) {
+				ptoken = 12;
+				strcpy(r[i].attr, "Variable Location");
 			}
-			printf("%s\t\tVariable Location----------Line %d\n",yytext,yylineno);
+			printf("%s\t\tVariable Location----------Line %d\n", yytext, yylineno);
+			fprintf(tokenFile, "%s\tVariable Location\t%d\n", yytext, yylineno);
 		}
-		else if(ntoken==47 && mlc==0)
-		{
-			if(rep==0 && qcnt%2==0)
-			{
-				ptoken=7;
-				strcpy(r[i].attr,"ARRAY");
+		else if (ntoken == 47 && mlc == 0) {
+			if (rep == 0 && qcnt % 2 == 0) {
+				ptoken = 7;
+				strcpy(r[i].attr, "Array");
 			}
-			printf("%s\t\tArray----------Line %d\n",yytext,yylineno);
+			printf("%s\t\tArray----------Line %d\n", yytext, yylineno);
+			fprintf(tokenFile, "%s\tArray\t%d\n", yytext, yylineno);
 		}
-		else if(ntoken==48 && mlc==0)
-		{
-			ptoken=15;
-			printf("%s\t\tSingle Line Comment----------Line %d\n",yytext,yylineno);
-			slcline=yylineno;
+		else if (ntoken == 48 && mlc == 0) {
+			ptoken = 15;
+			slcline = yylineno;
+			printf("%s\t\tSingle Line Comment----------Line %d\n", yytext, yylineno);
+			fprintf(tokenFile, "%s\tSingle Line Comment\t%d\n", yytext, yylineno);
 		}
-		else if(ntoken==49)
-		{
-			mlc=1;
-			printf("%s\t\tMulti Line Comment Start----------Line %d\n",yytext,yylineno);
+		else if (ntoken == 49) {
+			mlc = 1;
 			mlcline = yylineno;
-				
+			printf("%s\t\tMulti Line Comment Start----------Line %d\n", yytext, yylineno);
+			fprintf(tokenFile, "%s\tMulti Line Comment Start\t%d\n", yytext, yylineno);
 		}
-		else if(ntoken==50 && mlc==1)
-		{
-			mlc=0;
-			printf("%s\t\tMulti Line Comment End----------Line %d\n",yytext,yylineno);
-			mlcline=0;
+		else if (ntoken == 50 && mlc == 1) {
+			mlc = 0;
+			mlcline = 0;
+			printf("%s\t\tMulti Line Comment End----------Line %d\n", yytext, yylineno);
+			fprintf(tokenFile, "%s\tMulti Line Comment End\t%d\n", yytext, yylineno);
 		}
-		else if(ntoken==50 && mlc==0)
+		else if (ntoken == 50 && mlc == 0) {
 			printf("\n---------------ERROR! UNMATCHED NESTED END COMMENT-------------\n");
-		else if(ntoken==51 && mlc==0)
-		{
-			if(rep==0 && qcnt%2==0)
-			{
-				ptoken=8;
-				strcpy(r[i].attr,"Preprocessor Directive");
-			}
-			printf("%s\t\tPreprocessor Directive----------Line %d\n",yytext,yylineno);
 		}
-		else if(ntoken>=52 && ntoken<=53 && mlc==0)
-		{
-			if(rep==0 && qcnt%2==0)
-			{
-				ptoken=9;
-				strcpy(r[i].attr,"Pre Defined Function");
+		else if (ntoken == 51 && mlc == 0) {
+			if (rep == 0 && qcnt % 2 == 0) {
+				ptoken = 8;
+				strcpy(r[i].attr, "Preprocessor Directive");
 			}
-			printf("%s\t\tPre Defined Function----------Line %d\n",yytext,yylineno);
+			printf("%s\t\tPreprocessor Directive----------Line %d\n", yytext, yylineno);
+			fprintf(tokenFile, "%s\tPreprocessor Directive\t%d\n", yytext, yylineno);
 		}
-		else if(ntoken==54 && mlc==0)
-		{
-			if(rep==0 && qcnt%2==0)
-			{
-				ptoken=10;
-				strcpy(r[i].attr,"User Defined Function");
+		else if ((ntoken >= 52 && ntoken <= 53) && mlc == 0) {
+			if (rep == 0 && qcnt % 2 == 0) {
+				ptoken = 9;
+				strcpy(r[i].attr, "Pre Defined Function");
 			}
-			printf("%s\t\tUser Defined Function----------Line %d\n",yytext,yylineno);
+			printf("%s\t\tPre Defined Function----------Line %d\n", yytext, yylineno);
+			fprintf(tokenFile, "%s\tPre Defined Function\t%d\n", yytext, yylineno);
 		}
-		else if(ntoken==55 && mlc==0)
-		{
-			if(rep==0 && qcnt%2==0)
-			{
-				ptoken=11;
-				strcpy(r[i].attr,"Main Function");
+		else if (ntoken == 54 && mlc == 0) {
+			if (rep == 0 && qcnt % 2 == 0) {
+				ptoken = 10;
+				strcpy(r[i].attr, "User Defined Function");
 			}
-			printf("%s\t\tMain Function----------Line %d\n",yytext,yylineno);
+			printf("%s\t\tUser Defined Function----------Line %d\n", yytext, yylineno);
+			fprintf(tokenFile, "%s\tUser Defined Function\t%d\n", yytext, yylineno);
 		}
-		if(rep==0 && ntoken!=48 && ntoken!=49 && ntoken!=50 && mlc==0 && qcnt%2==0)
-		{
+		else if (ntoken == 55 && mlc == 0) {
+			if (rep == 0 && qcnt % 2 == 0) {
+				ptoken = 11;
+				strcpy(r[i].attr, "Main Function");
+			}
+			printf("%s\t\tMain Function----------Line %d\n", yytext, yylineno);
+			fprintf(tokenFile, "%s\tMain Function\t%d\n", yytext, yylineno);
+		}
+
+		if (rep == 0 && ntoken != 48 && ntoken != 49 && ntoken != 50 && mlc == 0 && qcnt % 2 == 0) {
 			h[ptoken]++;
 			r[i].attrno = h[ptoken];
 			i++;
-			x=x+4;
+			x += 4;
 		}
-		ntoken=yylex();
+		ntoken = yylex();
 	}
-	if(mlc==1)
-		printf("\n--------------------ERROR! UNMATCHED COMMENT starting at Line %d------------\n",mlcline);
-	if(b_c!=b_o)
-		printf("\n--------------------ERROR ! UNMATCHED '('---------------------\n");
-	if(c_c!=c_o)
-		printf("\n-------------------------ERROR ! UNMATCHED '{'----------------\n");
-	if(d_c!=d_o)
-		printf("\n--------------------ERROR ! UNMATCHED '['----------------------\n");
-	printf("\n------------Symbol Table---------------------\n\nSNo\tToken\t\tAttribute\t\tMemory Location\n\n");
 
-	for(j=0;j<i;j++)
-		printf("%d\t%s\t\t< %s , %d >\t\t%d\n",r[j].sno,r[j].token,r[j].attr,r[j].attrno,r[j].addr);
+	if (mlc == 1)
+		printf("\n--------------------ERROR! UNMATCHED COMMENT starting at Line %d------------\n", mlcline);
+	if (b_c != b_o)
+		printf("\n--------------------ERROR ! UNMATCHED '('---------------------\n");
+	if (c_c != c_o)
+		printf("\n-------------------------ERROR ! UNMATCHED '{'----------------\n");
+	if (d_c != d_o)
+		printf("\n--------------------ERROR ! UNMATCHED '['----------------------\n");
+
+	printf("\n------------Symbol Table---------------------\n\nSNo\tToken\t\tAttribute\t\tMemory Location\n\n");
+	for (j = 0; j < i; j++)
+		printf("%d\t%s\t\t< %s , %d >\t\t%d\n", r[j].sno, r[j].token, r[j].attr, r[j].attrno, r[j].addr);
+
+
+	fclose(tokenFile);  // <---- Close the file at the end
+	generate_symbol_table();
 	return 0;
 }
 
-int yywrap(void)
-{
-	return 1;
-}
