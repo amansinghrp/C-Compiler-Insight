@@ -81,9 +81,7 @@ int end[100];
 int arr[10];
 int gl1,gl2,ct=0,c=0,b;
 
-
-
-#line 87 "y.tab.c"
+#line 85 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -175,13 +173,13 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 25 "s_parser.y"
+#line 23 "s_parser.y"
 
 		int ival;
 		char *str;
 	
 
-#line 185 "y.tab.c"
+#line 183 "y.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -640,13 +638,13 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    32,    32,    33,    34,    35,    38,    55,    56,    57,
-      60,    63,    64,    65,    68,    69,    70,    71,    72,    78,
-      79,    80,    81,    84,    87,    88,    91,    94,    95,    98,
-      99,   100,   101,   102,   103,   106,   121,   125,   126,   127,
-     131,   134,   135,   138,   152,   153,   154,   155,   156,   157,
-     158,   159,   160,   163,   164,   167,   194,   206,   211,   212,
-     216,   220
+       0,    30,    30,    31,    32,    33,    36,    53,    54,    55,
+      58,    61,    62,    63,    66,    67,    68,    69,    70,    76,
+      77,    78,    79,    82,    85,    86,    89,    92,    93,    96,
+      97,    98,    99,   100,   101,   104,   119,   123,   124,   125,
+     129,   132,   133,   136,   150,   151,   152,   153,   154,   155,
+     156,   157,   158,   161,   162,   165,   192,   204,   209,   210,
+     214,   218
 };
 #endif
 
@@ -1302,7 +1300,7 @@ yyreduce:
   switch (yyn)
     {
   case 6: /* Function: Type ID '(' ')' CompoundStmt  */
-#line 38 "s_parser.y"
+#line 36 "s_parser.y"
                                        {
 	if ((yyvsp[-4].ival)!=returntype_func(ct))
 	{
@@ -1318,28 +1316,28 @@ yyreduce:
 		g_addr+=4;
 	}
 	}
-#line 1322 "y.tab.c"
+#line 1320 "y.tab.c"
     break;
 
   case 18: /* stmt: RETURN consttype ';'  */
-#line 72 "s_parser.y"
+#line 70 "s_parser.y"
                                {
 					if(!(strspn((yyvsp[-1].str),"0123456789")==strlen((yyvsp[-1].str)))) 
 						storereturn(ct,FLOAT); 
 					else 
 						storereturn(ct,INT); ct++;
 				}
-#line 1333 "y.tab.c"
+#line 1331 "y.tab.c"
     break;
 
   case 19: /* stmt: RETURN ';'  */
-#line 78 "s_parser.y"
+#line 76 "s_parser.y"
                      {storereturn(ct,VOID); ct++;}
-#line 1339 "y.tab.c"
+#line 1337 "y.tab.c"
     break;
 
   case 35: /* assignment1: ID '=' assignment1  */
-#line 107 "s_parser.y"
+#line 105 "s_parser.y"
         {
 		int sct=returnscope((yyvsp[-2].str),stack[index1-1]); 
 		int type=returntype((yyvsp[-2].str),sct); 
@@ -1353,35 +1351,35 @@ yyreduce:
 				check_scope_update((yyvsp[-2].str),(yyvsp[0].str),currscope);
 		} 
 		}
-#line 1357 "y.tab.c"
+#line 1355 "y.tab.c"
     break;
 
   case 36: /* assignment1: ID ',' assignment1  */
-#line 121 "s_parser.y"
+#line 119 "s_parser.y"
                                 {
 					if(lookup((yyvsp[-2].str))) 
 						printf("\nUndeclared Variable %s : Line %d\n",(yyvsp[-2].str),printline());
 				}
-#line 1366 "y.tab.c"
+#line 1364 "y.tab.c"
     break;
 
   case 39: /* assignment1: ID  */
-#line 127 "s_parser.y"
+#line 125 "s_parser.y"
               {
 		if(lookup((yyvsp[0].str))) 
 			printf("\nUndeclared Variable %s : Line %d\n",(yyvsp[0].str),printline());
 		}
-#line 1375 "y.tab.c"
+#line 1373 "y.tab.c"
     break;
 
   case 41: /* assignment2: ID '=' exp  */
-#line 134 "s_parser.y"
+#line 132 "s_parser.y"
                          {c=0;}
-#line 1381 "y.tab.c"
+#line 1379 "y.tab.c"
     break;
 
   case 43: /* exp: ID  */
-#line 138 "s_parser.y"
+#line 136 "s_parser.y"
          {
 	if(c==0) 
 	{
@@ -1396,11 +1394,11 @@ yyreduce:
 			printf("\nError : Type Mismatch : Line %d\n",printline());
 	}
 	}
-#line 1400 "y.tab.c"
+#line 1398 "y.tab.c"
     break;
 
   case 55: /* Declaration: Type ID '=' consttype ';'  */
-#line 168 "s_parser.y"
+#line 166 "s_parser.y"
         {
 		if( (!(strspn((yyvsp[-1].str),"0123456789")==strlen((yyvsp[-1].str)))) && (yyvsp[-4].ival)==258) 
 			printf("\nError : Type Mismatch : Line %d\n",printline()); 
@@ -1426,11 +1424,11 @@ yyreduce:
 			g_addr+=4;
 		}
 	}
-#line 1430 "y.tab.c"
+#line 1428 "y.tab.c"
     break;
 
   case 56: /* Declaration: assignment1 ';'  */
-#line 194 "s_parser.y"
+#line 192 "s_parser.y"
                            {
 				if(!lookup((yyvsp[-1].str))) 
 				{ 
@@ -1442,39 +1440,39 @@ yyreduce:
 				else 
 					printf("\nError : Undeclared Variable %s : Line %d\n",(yyvsp[-1].str),printline()); 
 				}
-#line 1446 "y.tab.c"
+#line 1444 "y.tab.c"
     break;
 
   case 57: /* Declaration: Type ID '[' assignment ']' ';'  */
-#line 206 "s_parser.y"
+#line 204 "s_parser.y"
                                          {
 						insert((yyvsp[-4].str),ARRAY,g_addr); 
 						insert((yyvsp[-4].str),(yyvsp[-5].ival),g_addr); 
 						g_addr+=4; 
 					}
-#line 1456 "y.tab.c"
+#line 1454 "y.tab.c"
     break;
 
   case 59: /* Declaration: STRUCT ID '{' Declaration '}' ';'  */
-#line 212 "s_parser.y"
+#line 210 "s_parser.y"
                                             {
 						insert((yyvsp[-4].str),STRUCT,g_addr); 
 						g_addr+=4; 
 						}
-#line 1465 "y.tab.c"
+#line 1463 "y.tab.c"
     break;
 
   case 60: /* Declaration: STRUCT ID ID ';'  */
-#line 216 "s_parser.y"
+#line 214 "s_parser.y"
                            {
 				insert((yyvsp[-1].str),STRUCT_VAR,g_addr); 
 				g_addr+=4;
 				}
-#line 1474 "y.tab.c"
+#line 1472 "y.tab.c"
     break;
 
 
-#line 1478 "y.tab.c"
+#line 1476 "y.tab.c"
 
       default: break;
     }
@@ -1667,7 +1665,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 225 "s_parser.y"
+#line 223 "s_parser.y"
 
 
 #include "lex.yy.c"
@@ -1688,11 +1686,10 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
-int yyerror(const char *s) {
-    fprintf(stderr, "Error: %s\n", s);
-    return 0;
+yyerror(char *s)
+{
+	printf("\nLine %d : %s %s\n",yylineno,s,yytext);
 }
-
 
 int printline()
 {
@@ -1713,4 +1710,3 @@ void close1()
 	return;
 }
 	
-

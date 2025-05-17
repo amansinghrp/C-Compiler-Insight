@@ -101,7 +101,7 @@ int yylineno;
 void	return VOID;
 break	return BREAK;
 if    	return IF;
-else    return ELSE;
+else    return ELSE; 
 printf 	return PRINTF;
 scanf 	return SCANF;
 #include<stdio.h> return HEAD;
