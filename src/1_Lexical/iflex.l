@@ -9,6 +9,7 @@ space [ ]
 %{
 #define PREPROC 51
 #include "symbol_table.h"  
+#include <stdlib.h>
 extern void generate_symbol_table();
 FILE *tokenFile;
 int yylineno;
@@ -165,8 +166,20 @@ struct row
 	int attrno;
 	int addr;
 }r[100000];
-int main(void)
-{
+int main(int argc, char *argv[]) {  
+    if (argc < 2) {
+        fprintf(stderr, "Usage: %s <input_file.c>\n", argv[0]);
+        exit(EXIT_FAILURE);
+    }
+
+    // Open input file
+    FILE *input_file = fopen(argv[1], "r");
+    if (!input_file) {
+        perror("Error opening input file");
+        exit(EXIT_FAILURE);
+    }
+    yyin = input_file;
+
 	tokenFile = fopen("tokens.txt", "w");  
     if (!tokenFile) {
         perror("Unable to create tokens.txt");
@@ -366,7 +379,8 @@ int main(void)
 		printf("%d\t%s\t\t< %s , %d >\t\t%d\n", r[j].sno, r[j].token, r[j].attr, r[j].attrno, r[j].addr);
 
 
-	fclose(tokenFile);  // <---- Close the file at the end
+	fclose(tokenFile); 
+	fclose(input_file); 
 	generate_symbol_table();
 	return 0;
 }

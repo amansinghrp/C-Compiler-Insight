@@ -680,6 +680,7 @@ char *yytext;
 #line 10 "iflex.l"
 #define PREPROC 51
 #include "symbol_table.h"  
+#include <stdlib.h>
 extern void generate_symbol_table();
 FILE *tokenFile;
 int yylineno;
@@ -751,8 +752,8 @@ int yylineno;
 #define FUNC 54
 #define MAINFUNC 55
 
-#line 755 "lex.yy.c"
 #line 756 "lex.yy.c"
+#line 757 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -970,10 +971,10 @@ YY_DECL
 		}
 
 	{
-#line 85 "iflex.l"
+#line 86 "iflex.l"
 
 
-#line 977 "lex.yy.c"
+#line 978 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1033,12 +1034,12 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 87 "iflex.l"
+#line 88 "iflex.l"
 { printf("%s\tPreprocessor Directive\n", yytext); return HEAD; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 88 "iflex.l"
+#line 89 "iflex.l"
 { 
     // Split into define, identifier, and value
     printf("#define\tPreprocessor Directive\n");
@@ -1049,331 +1050,331 @@ YY_RULE_SETUP
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 94 "iflex.l"
+#line 95 "iflex.l"
 {yylineno++;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 95 "iflex.l"
+#line 96 "iflex.l"
 return MAINFUNC;
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 96 "iflex.l"
+#line 97 "iflex.l"
 return MAINFUNC;
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 97 "iflex.l"
+#line 98 "iflex.l"
 return MAINFUNC;
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 98 "iflex.l"
+#line 99 "iflex.l"
 return MAINFUNC;
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 99 "iflex.l"
+#line 100 "iflex.l"
 return RETURN;
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 100 "iflex.l"
+#line 101 "iflex.l"
 return VOID;
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 101 "iflex.l"
+#line 102 "iflex.l"
 return BREAK;
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 102 "iflex.l"
+#line 103 "iflex.l"
 return IF;
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 103 "iflex.l"
+#line 104 "iflex.l"
 return ELSE;
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 104 "iflex.l"
+#line 105 "iflex.l"
 return PRINTF;
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 105 "iflex.l"
+#line 106 "iflex.l"
 return SCANF;
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 106 "iflex.l"
+#line 107 "iflex.l"
 return HEAD;
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 107 "iflex.l"
+#line 108 "iflex.l"
 return HEAD;
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 108 "iflex.l"
+#line 109 "iflex.l"
 return DEF;
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 109 "iflex.l"
+#line 110 "iflex.l"
 return DEF;
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 110 "iflex.l"
+#line 111 "iflex.l"
 return DEF;
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 111 "iflex.l"
+#line 112 "iflex.l"
 return SLC;
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 112 "iflex.l"
+#line 113 "iflex.l"
 return MLCO;
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 113 "iflex.l"
+#line 114 "iflex.l"
 return MLCC;
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 114 "iflex.l"
+#line 115 "iflex.l"
 return NUM;
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 115 "iflex.l"
+#line 116 "iflex.l"
 return NUM;
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 116 "iflex.l"
+#line 117 "iflex.l"
 return LE;
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 117 "iflex.l"
+#line 118 "iflex.l"
 return GE;
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 118 "iflex.l"
+#line 119 "iflex.l"
 return EQ;
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 119 "iflex.l"
+#line 120 "iflex.l"
 return NE;
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 120 "iflex.l"
+#line 121 "iflex.l"
 return OR;
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 121 "iflex.l"
+#line 122 "iflex.l"
 return AND;
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 122 "iflex.l"
+#line 123 "iflex.l"
 return WHILE;
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 123 "iflex.l"
+#line 124 "iflex.l"
 return SEMICOLON;
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 124 "iflex.l"
+#line 125 "iflex.l"
 return COLON;
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 125 "iflex.l"
+#line 126 "iflex.l"
 return FULLSTOP;
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 126 "iflex.l"
+#line 127 "iflex.l"
 return INT;
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 127 "iflex.l"
+#line 128 "iflex.l"
 return FLOAT;
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 128 "iflex.l"
+#line 129 "iflex.l"
 return B1;
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 129 "iflex.l"
+#line 130 "iflex.l"
 return B2;
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 130 "iflex.l"
+#line 131 "iflex.l"
 return C1;
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 131 "iflex.l"
+#line 132 "iflex.l"
 return C2;
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 132 "iflex.l"
+#line 133 "iflex.l"
 return ASS;
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 133 "iflex.l"
+#line 134 "iflex.l"
 return PLUS;
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 134 "iflex.l"
+#line 135 "iflex.l"
 return SUB;
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 135 "iflex.l"
+#line 136 "iflex.l"
 return MULT;
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 136 "iflex.l"
+#line 137 "iflex.l"
 return DIV;
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 137 "iflex.l"
+#line 138 "iflex.l"
 return MOD;
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 138 "iflex.l"
+#line 139 "iflex.l"
 return D;
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 139 "iflex.l"
+#line 140 "iflex.l"
 return F;
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 140 "iflex.l"
+#line 141 "iflex.l"
 return Q;
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 141 "iflex.l"
+#line 142 "iflex.l"
 return COMMA;
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 142 "iflex.l"
+#line 143 "iflex.l"
 return CA;
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 143 "iflex.l"
+#line 144 "iflex.l"
 return CSA;
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 144 "iflex.l"
+#line 145 "iflex.l"
 return BA;
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 145 "iflex.l"
+#line 146 "iflex.l"
 return BO;
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 146 "iflex.l"
+#line 147 "iflex.l"
 return BN;
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 147 "iflex.l"
+#line 148 "iflex.l"
 return L;
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 148 "iflex.l"
+#line 149 "iflex.l"
 return G;
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 149 "iflex.l"
+#line 150 "iflex.l"
 return PP;
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 150 "iflex.l"
+#line 151 "iflex.l"
 return MM;
 	YY_BREAK
 case 60:
 /* rule 60 can match eol */
 YY_RULE_SETUP
-#line 151 "iflex.l"
+#line 152 "iflex.l"
 ;
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 152 "iflex.l"
+#line 153 "iflex.l"
 return ID;
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 153 "iflex.l"
+#line 154 "iflex.l"
 return ARR;
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 154 "iflex.l"
+#line 155 "iflex.l"
 return FUNC;
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 155 "iflex.l"
+#line 156 "iflex.l"
 return D1;
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 156 "iflex.l"
+#line 157 "iflex.l"
 return D2;
 	YY_BREAK
 case 66:
 YY_RULE_SETUP
-#line 157 "iflex.l"
+#line 158 "iflex.l"
 printf("NA\n");
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
-#line 158 "iflex.l"
+#line 159 "iflex.l"
 ECHO;
 	YY_BREAK
-#line 1377 "lex.yy.c"
+#line 1378 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2344,7 +2345,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 158 "iflex.l"
+#line 159 "iflex.l"
 
 
 struct row
@@ -2355,8 +2356,20 @@ struct row
 	int attrno;
 	int addr;
 }r[100000];
-int main(void)
-{
+int main(int argc, char *argv[]) {  
+    if (argc < 2) {
+        fprintf(stderr, "Usage: %s <input_file.c>\n", argv[0]);
+        exit(EXIT_FAILURE);
+    }
+
+    // Open input file
+    FILE *input_file = fopen(argv[1], "r");
+    if (!input_file) {
+        perror("Error opening input file");
+        exit(EXIT_FAILURE);
+    }
+    yyin = input_file;
+
 	tokenFile = fopen("tokens.txt", "w");  
     if (!tokenFile) {
         perror("Unable to create tokens.txt");
@@ -2556,7 +2569,8 @@ int main(void)
 		printf("%d\t%s\t\t< %s , %d >\t\t%d\n", r[j].sno, r[j].token, r[j].attr, r[j].attrno, r[j].addr);
 
 
-	fclose(tokenFile);  // <---- Close the file at the end
+	fclose(tokenFile); 
+	fclose(input_file); 
 	generate_symbol_table();
 	return 0;
 }

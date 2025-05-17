@@ -1,0 +1,45 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background: #f0f0f0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+#editor {
+    height: 400px;
+    border: 2px solid #ccc;
+    margin-bottom: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    background: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin: 10px 0;
+}
+
+.token {
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 5px;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+.symbol-table table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+.symbol-table th, .symbol-table td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
