@@ -3,7 +3,7 @@ digit [0-9]
 
 
 %%
-[ \t] ; 
+[ \t] ;
 \n	{yylineno++;}
 "{"	{open1(); return '{';}
 "}"	{close1(); return '}';}
@@ -27,5 +27,4 @@ printf	return PRINT;
 \".*\"	return STRING;
 .	return yytext[0];
 %%
-
 

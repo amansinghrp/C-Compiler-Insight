@@ -264,4 +264,3 @@ void close1()
 	return;
 }
 	
-

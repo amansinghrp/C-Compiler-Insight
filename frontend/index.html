@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>C Compiler Insights</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>C Compiler Insights</h1>
+  </header>
+
+  <section id="code-input">
+    <h2>Enter C Code</h2>
+    <textarea id="c-code" rows="12" placeholder="Type your C code here..."></textarea>
+    <div class="buttons">
+      <button onclick="runAllPhases()">Run All Phases</button>
+      <button onclick="runLexical()">Lexical Analysis</button>
+      <button onclick="runSyntax()">Syntax Analysis</button>
+      <button onclick="runSemantic()">Semantic Analysis</button>
+    </div>
+  </section>
+
+  <section id="outputs">
+    <div class="phase-output" id="lexical-output">
+      <h3>Lexical Analysis</h3>
+      <div id="tokens-container"></div>
+    </div>
+
+    <div class="phase-output" id="syntax-output">
+      <h3>Syntax Analysis</h3>
+      <div id="parse-tree-container"></div>
+    </div>
+
+    <div class="phase-output" id="semantic-output">
+      <h3>Semantic Analysis</h3>
+      <div id="symbol-table-container"></div>
+    </div>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>
