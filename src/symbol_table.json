@@ -1,0 +1,37 @@
+[
+  {
+    "SNo": 1,
+    "Token": "define",
+    "Attribute": "Identifier",
+    "AttributeNumber": 1,
+    "MemoryLocation": 1000
+  },
+  {
+    "SNo": 2,
+    "Token": "x",
+    "Attribute": "Identifier",
+    "AttributeNumber": 2,
+    "MemoryLocation": 1004
+  },
+  {
+    "SNo": 3,
+    "Token": "main()",
+    "Attribute": "Main Function",
+    "AttributeNumber": 3,
+    "MemoryLocation": 1008
+  },
+  {
+    "SNo": 4,
+    "Token": "a",
+    "Attribute": "Identifier",
+    "AttributeNumber": 4,
+    "MemoryLocation": 1012
+  },
+  {
+    "SNo": 5,
+    "Token": "b",
+    "Attribute": "Identifier",
+    "AttributeNumber": 5,
+    "MemoryLocation": 1016
+  }
+]
