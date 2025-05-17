@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>C Compiler Insights</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    textarea { width: 100%; height: 200px; }
+    pre { background: #f4f4f4; padding: 10px; border-radius: 5px; }
+  </style>
+</head>
+<body>
+  <h1>C Compiler Insights</h1>
+  <form id="codeForm">
+    <textarea name="code" placeholder="Paste your C code here..."></textarea>
+    <button type="submit">Analyze</button>
+  </form>
+  <h2>Tokens</h2>
+  <pre id="tokensOutput"></pre>
+  <h2>Symbol Table</h2>
+  <pre id="symbolTableOutput"></pre>
+
+  <script>
+    const form = document.getElementById('codeForm');
+    form.onsubmit = async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const response = await fetch('/analyze', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await response.json();
+      if (data.error) {
+        alert(data.error);
+      } else {
+        document.getElementById('tokensOutput').textContent = data.tokens.join('\n');
+        document.getElementById('symbolTableOutput').textContent = JSON.stringify(data.symbol_table, null, 2);
+      }
+    };
+  </script>
+</body>
+</html>
