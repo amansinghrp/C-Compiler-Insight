@@ -1,37 +1,38 @@
-#include<stdio.h>	Header	1
-define	Identifier	2
-x	Identifier	2
-3	Constant	2
-void	Keyword	3
-main()	Main Function	3
-{	Special Character	4
-int	Keyword	5
-a	Identifier	5
-=	Operator	5
-4	Constant	5
-,	Special Character	5
-b	Identifier	5
-=	Operator	5
-5	Constant	5
-;	Special Character	5
-while	Keyword	6
-(	Special Character	6
+//	Single Line Comment	1
+#include<stdio.h>	Header	2
+define	Identifier	3
+x	Identifier	3
+3	Constant	3
+void	Keyword	4
+main()	Main Function	4
+{	Special Character	5
+int	Keyword	6
 a	Identifier	6
-<	Operator	6
-10	Constant	6
-)	Special Character	6
-{	Special Character	7
-a	Identifier	8
-=	Operator	8
-a	Identifier	8
-+	Operator	8
-1	Constant	8
-;	Special Character	8
-b	Identifier	9
+=	Operator	6
+4	Constant	6
+,	Special Character	6
+b	Identifier	6
+=	Operator	6
+5	Constant	6
+;	Special Character	6
+while	Keyword	7
+(	Special Character	7
+a	Identifier	7
+<	Operator	7
+10	Constant	7
+)	Special Character	7
+{	Special Character	8
+a	Identifier	9
 =	Operator	9
-b	Identifier	9
--	Operator	9
+a	Identifier	9
++	Operator	9
 1	Constant	9
 ;	Special Character	9
-}	Special Character	10
+b	Identifier	10
+=	Operator	10
+b	Identifier	10
+-	Operator	10
+1	Constant	10
+;	Special Character	10
 }	Special Character	11
+}	Special Character	12
