@@ -3,96 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <title>C Compiler Insights</title>
-    <link rel="stylesheet" href="/static/style.css">
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 40px;
-            background-color: #f0f4f8;
-            color: #222;
-        }
+    <link rel="stylesheet" href="/static/styles.css">
 
-        h1 {
-            text-align: center;
-            margin-bottom: 30px;
-            color: #2c3e50;
-        }
+    <!-- CodeMirror Styles -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/eclipse.min.css">
 
-        textarea {
-            width: 100%;
-            min-height: 400px;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 15px;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            background-color: #fff;
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
-            resize: vertical;
-        }
-
-        button {
-            margin: 10px 10px 20px 0;
-            padding: 10px 18px;
-            font-size: 15px;
-            cursor: pointer;
-            border: none;
-            border-radius: 5px;
-            background-color: #3498db;
-            color: white;
-            transition: background-color 0.3s ease;
-        }
-
-        button:hover {
-            background-color: #2980b9;
-        }
-
-        pre {
-            background-color: #f8f9fa;
-            padding: 15px;
-            border-left: 4px solid #3498db;
-            border-radius: 5px;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            font-size: 14px;
-        }
-
-        .section {
-            margin-bottom: 30px;
-        }
-
-        h2 {
-            color: #34495e;
-            border-bottom: 2px solid #ccc;
-            padding-bottom: 5px;
-            margin-bottom: 10px;
-        }
-
-        h3 {
-            color: #555;
-            margin-top: 20px;
-        }
-    </style>
 </head>
 <body>
     <h1>💻 C Compiler Insights</h1>
 
     <div class="section">
         <label for="code"><strong>Enter your C code below:</strong></label>
-        <textarea id="code" placeholder="Write your C code here..."></textarea>
+        <textarea id="code">// Write your C code here...</textarea>
     </div>
 
     <div class="section">
-        <button onclick="runLexical()">🔍 Lexical Analysis</button>
-        <button onclick="runSyntax()">🧠 Syntax Analysis</button>
+        <button onclick="runLexical()">Lexical Analysis</button>
+        <button onclick="runSyntax()">Syntax Analysis</button>
     </div>
 
     <div class="section">
         <h2>Lexical Analysis Output</h2>
         <h3>Tokens</h3>
         <pre id="tokens"></pre>
-
-        <h3>Symbol Table</h3>
+    </div>
+    
+    <div class="section">
+        <h2>Symbol Table</h2>
         <pre id="symbolTable"></pre>
     </div>
 
@@ -101,9 +39,26 @@
         <pre id="syntaxOutput"></pre>
     </div>
 
+
+    <!-- CodeMirror Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/clike/clike.min.js"></script>
+
     <script>
+        // Initialize CodeMirror
+        const editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+            mode: "text/x-csrc",
+            theme: "eclipse",
+            lineNumbers: true,
+            indentUnit: 4,
+            smartIndent: true,
+            tabSize: 4,
+            matchBrackets: true,
+            autoCloseBrackets: true
+        });
+        editor.setSize("100%", "400px");
         async function runLexical() {
-            const code = document.getElementById('code').value;
+            const code = editor.getValue();
             if (!code.trim()) {
                 alert('Please enter some C code first.');
                 return;
@@ -129,7 +84,7 @@
         }
 
         async function runSyntax() {
-            const code = document.getElementById('code').value;
+            const code = editor.getValue();
             if (!code.trim()) {
                 alert('Please enter some C code first.');
                 return;

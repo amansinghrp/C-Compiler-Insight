@@ -1,8 +1,6 @@
 #include<stdio.h>
 int main(){
-int a = 10;
-if(a == 10{
-print("ok");
-
-return 0;
+	char a[100];
+    printf("%c", a[0]);
+    return 0;    
 }
