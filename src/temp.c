@@ -1,6 +1,11 @@
 #include<stdio.h>
-int main(){
-	char a[100];
-    printf("%c", a[0]);
-    return 0;    
+#define x 3
+void main()
+{
+	int a=4,b=5;
+	while(a<10)
+	{
+		a=a+1;
+		b=b-1;
+	}
 }

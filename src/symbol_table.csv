@@ -1,3 +1,6 @@
 SNo,Token,Attribute,AttributeNumber,MemoryLocation
-1,main(),Main Function,1,1000
-2,char,Identifier,2,1004
+1,define,Identifier,1,1000
+2,x,Identifier,2,1004
+3,main(),Main Function,3,1008
+4,a,Identifier,4,1012
+5,b,Identifier,5,1016

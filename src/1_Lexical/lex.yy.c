@@ -1096,7 +1096,7 @@ return IF;
 case 12:
 YY_RULE_SETUP
 #line 104 "iflex.l"
-return ELSE;
+return ELSE; 
 	YY_BREAK
 case 13:
 YY_RULE_SETUP

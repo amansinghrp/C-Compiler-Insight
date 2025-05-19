@@ -1,5 +1,6 @@
 %expect 24
 
+%define parse.error verbose
 %nonassoc NO_ELSE
 %nonassoc  ELSE 
 %left '<' '>' '=' GE_OP LE_OP EQ_OP NE_OP 

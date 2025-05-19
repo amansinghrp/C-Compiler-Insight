@@ -5,7 +5,7 @@ app = Flask(__name__, template_folder='templates', static_folder='static')
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 SRC_DIR = BASE_DIR
-LEXICAL_BIN_PATH = os.path.join(SRC_DIR, 'bin', 'compiler')
+LEXICAL_BIN_PATH = os.path.join(SRC_DIR, 'bin', 'lexer')
 SYNTAX_BIN_PATH = os.path.join(SRC_DIR, 'bin', 'syntax')
 TEMP_C_PATH = os.path.join(BASE_DIR, 'temp.c')
 TOKENS_PATH = os.path.join(SRC_DIR, 'tokens.txt')
