@@ -54,37 +54,18 @@ extern int yydebug;
     YYEOF = 0,                     /* "end of file"  */
     YYerror = 256,                 /* error  */
     YYUNDEF = 257,                 /* "invalid token"  */
-    VOID = 258,                    /* VOID  */
-    CHARACTER = 259,               /* CHARACTER  */
+    INT = 258,                     /* INT  */
+    RETURN = 259,                  /* RETURN  */
     PRINTFF = 260,                 /* PRINTFF  */
-    SCANFF = 261,                  /* SCANFF  */
-    INT = 262,                     /* INT  */
-    FLOAT = 263,                   /* FLOAT  */
-    CHAR = 264,                    /* CHAR  */
-    FOR = 265,                     /* FOR  */
-    IF = 266,                      /* IF  */
-    ELSE = 267,                    /* ELSE  */
-    TRUE = 268,                    /* TRUE  */
-    FALSE = 269,                   /* FALSE  */
-    NUMBER = 270,                  /* NUMBER  */
-    FLOAT_NUM = 271,               /* FLOAT_NUM  */
-    ID = 272,                      /* ID  */
-    LE = 273,                      /* LE  */
-    GE = 274,                      /* GE  */
-    EQ = 275,                      /* EQ  */
-    NE = 276,                      /* NE  */
-    GT = 277,                      /* GT  */
-    LT = 278,                      /* LT  */
-    AND = 279,                     /* AND  */
-    OR = 280,                      /* OR  */
-    STR = 281,                     /* STR  */
-    ADD = 282,                     /* ADD  */
-    MULTIPLY = 283,                /* MULTIPLY  */
-    DIVIDE = 284,                  /* DIVIDE  */
-    SUBTRACT = 285,                /* SUBTRACT  */
-    UNARY = 286,                   /* UNARY  */
-    INCLUDE = 287,                 /* INCLUDE  */
-    RETURN = 288                   /* RETURN  */
+    IDENTIFIER = 261,              /* IDENTIFIER  */
+    NUMBER = 262,                  /* NUMBER  */
+    SEMICOLON = 263,               /* SEMICOLON  */
+    ASSIGN = 264,                  /* ASSIGN  */
+    LPAREN = 265,                  /* LPAREN  */
+    RPAREN = 266,                  /* RPAREN  */
+    LBRACE = 267,                  /* LBRACE  */
+    RBRACE = 268,                  /* RBRACE  */
+    COMMA = 269                    /* COMMA  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -93,56 +74,29 @@ extern int yydebug;
 #define YYEOF 0
 #define YYerror 256
 #define YYUNDEF 257
-#define VOID 258
-#define CHARACTER 259
+#define INT 258
+#define RETURN 259
 #define PRINTFF 260
-#define SCANFF 261
-#define INT 262
-#define FLOAT 263
-#define CHAR 264
-#define FOR 265
-#define IF 266
-#define ELSE 267
-#define TRUE 268
-#define FALSE 269
-#define NUMBER 270
-#define FLOAT_NUM 271
-#define ID 272
-#define LE 273
-#define GE 274
-#define EQ 275
-#define NE 276
-#define GT 277
-#define LT 278
-#define AND 279
-#define OR 280
-#define STR 281
-#define ADD 282
-#define MULTIPLY 283
-#define DIVIDE 284
-#define SUBTRACT 285
-#define UNARY 286
-#define INCLUDE 287
-#define RETURN 288
+#define IDENTIFIER 261
+#define NUMBER 262
+#define SEMICOLON 263
+#define ASSIGN 264
+#define LPAREN 265
+#define RPAREN 266
+#define LBRACE 267
+#define RBRACE 268
+#define COMMA 269
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 49 "parser.y"
- struct var_name { 
-			char name[100]; 
-			struct node* nd;
-		} nd_obj;
+#line 25 "parser.y"
 
-		struct var_name2 { 
-			char name[100]; 
-			struct node* nd;
-			char type[5];
-		} nd_obj2; 
-	
+    char *strval;
+    struct ASTNode *node;
 
-#line 146 "y.tab.h"
+#line 100 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
