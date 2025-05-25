@@ -12,12 +12,5 @@
     "Attribute": "Identifier",
     "AttributeNumber": 2,
     "MemoryLocation": 1004
-  },
-  {
-    "SNo": 3,
-    "Token": "b",
-    "Attribute": "Identifier",
-    "AttributeNumber": 3,
-    "MemoryLocation": 1008
   }
 ]

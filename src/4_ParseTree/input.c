@@ -1,11 +1,10 @@
 #include<stdio.h>
 int main(){
-    int a = 10;
-    if(a < 10){
-        a = 11;
+	int a = 10;
+    while(a > 1){
+        printf("%d\n", a);
+        a = a-2;
     }
-    else{
-        a = 12;
-    }
+    printf("End of program");
     return 0;
 }

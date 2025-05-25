@@ -71,6 +71,7 @@
 %token <nd_obj> CHARACTER PRINTFF SCANFF INT FLOAT CHAR FOR IF ELSE TRUE FALSE NUMBER FLOAT_NUM ID LE GE EQ NE GT LT AND OR STR ADD MULTIPLY DIVIDE SUBTRACT UNARY INCLUDE RETURN 
 %type <nd_obj> headers main body return datatype statement arithmetic relop program else
 %type <nd_obj2> init value expression
+%type <nd_obj> printf_args opt_printf_args
 %type <nd_obj3> condition
 
 %%
@@ -110,14 +111,38 @@ body: FOR { add('K'); is_for = 1; } '(' statement ';' condition ';' statement ')
 }
 | statement ';' { $$.nd = $1.nd; }
 | body body { $$.nd = mknode($1.nd, $2.nd, "statements"); }
-| PRINTFF { add('K'); } '(' STR ')' ';' { $$.nd = mknode(NULL, NULL, "printf"); }
+| PRINTFF { add('K'); }
+    '(' STR opt_printf_args ')' ';'
+    {
+      struct node *strNode = mknode(NULL, NULL, $4.name);
+      struct node *argsNode = $5.nd;          
+      $$.nd = mknode(strNode, argsNode, "printf");
+    }
+
 | SCANFF { add('K'); } '(' STR ',' '&' ID ')' ';' { $$.nd = mknode(NULL, NULL, "scanf"); }
 ;
 
 else: ELSE { add('K'); } '{' body '}' { $$.nd = mknode(NULL, $4.nd, $1.name); }
 | { $$.nd = NULL; }
 ;
-
+opt_printf_args
+  :                { $$.nd = NULL; }
+  | ',' printf_args { $$.nd = $2.nd; }
+;
+printf_args
+  : expression
+      { 
+        /* leaf node for a single argument */
+        $$.nd = mknode(NULL, $1.nd, "arg");  
+      }
+  | printf_args ',' expression
+      {
+        /* append another arg to the right */
+        struct node *leftList = $1.nd;
+        struct node *newArg   = mknode(NULL, $3.nd, "arg");
+        $$.nd = mknode(leftList, newArg, "args");
+      }
+;
 condition: value relop value { 
     $$.nd = mknode($1.nd, $3.nd, $2.name); 
     if(is_for) {
@@ -268,7 +293,16 @@ return: RETURN { add('K'); } value ';' { check_return_type($3.name); $1.nd = mkn
 
 void generate_dot(FILE *fp, struct node *node) {
     if(node == NULL) return;
-    fprintf(fp, "  \"%p\" [label=\"%s\"];\n", (void*)node, node->token);
+    char *tok = node->token;
+    char  buf[512];
+    if (tok[0] == '"' && tok[strlen(tok)-1] == '"') {
+        // strip leading and trailing quote
+        size_t len = strlen(tok);
+        memcpy(buf, tok+1, len-2);
+        buf[len-2] = '\0';
+        tok = buf;
+    }
+    fprintf(fp, "  \"%p\" [label=\"%s\"];\n", (void*)node, tok);
     if(node->left) {
         fprintf(fp, "  \"%p\" -> \"%p\";\n", (void*)node, (void*)node->left);
         generate_dot(fp, node->left);
@@ -295,7 +329,7 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "Usage: %s <input_file>\n", argv[0]);
         return 1;
     }
-
+ 
     yyin = fopen(argv[1], "r");
     if (!yyin) {
         perror(argv[1]);
@@ -351,6 +385,10 @@ char *get_type(char *var){
 }
 
 void add(char c) {
+    if (yytext == NULL || strlen(yytext) == 0) {
+        fprintf(stderr, "Invalid yytext in add()\n");
+    }
+
     if(c == 'V'){
         for(int i=0; i<10; i++){
             if(!strcmp(reserved[i], yytext)){
@@ -381,7 +419,11 @@ void add(char c) {
     }
 }
 
-struct node* mknode(struct node *left, struct node *right, char *token) {    
+struct node* mknode(struct node *left, struct node *right, char *token) { 
+    if (yytext == NULL || strlen(yytext) == 0) {
+        fprintf(stderr, "Invalid yytext in add()\n");
+    }
+   
     struct node *newnode = malloc(sizeof(struct node));
     newnode->left = left;
     newnode->right = right;
