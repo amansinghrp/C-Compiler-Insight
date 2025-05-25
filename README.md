@@ -14,3 +14,9 @@ To run the parse tree generation code:
     3. gcc lex.yy.c parser.tab.c -o treeNew
 to run
     >> ./treeNew input.c
+
+
+To Activate the virtual environment: inside the src folder run:
+    >> source myenv/bin/activate
+To deactivate the python environment:
+    >> deactivate
