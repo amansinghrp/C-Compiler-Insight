@@ -55,7 +55,6 @@ def analyze():
             symbol_table = json.load(f)
     except Exception as e:
         return jsonify({"error": f"Error reading output files: {str(e)}"}), 500
-
     return jsonify({
         "tokens": tokens,
         "symbol_table": symbol_table

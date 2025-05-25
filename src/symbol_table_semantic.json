@@ -24,12 +24,6 @@
     "line_no": 4
   },
   {
-    "id_name": "20",
-    "data_type": "CONST",
-    "type": "Constant",
-    "line_no": 4
-  },
-  {
     "id_name": "f",
     "data_type": "float",
     "type": "Variable",
@@ -46,41 +40,5 @@
     "data_type": "CONST",
     "type": "Constant",
     "line_no": 6
-  },
-  {
-    "id_name": "5",
-    "data_type": "CONST",
-    "type": "Constant",
-    "line_no": 7
-  },
-  {
-    "id_name": "21",
-    "data_type": "CONST",
-    "type": "Constant",
-    "line_no": 8
-  },
-  {
-    "id_name": "if",
-    "data_type": "N/A",
-    "type": "Keyword",
-    "line_no": 9
-  },
-  {
-    "id_name": "printf",
-    "data_type": "N/A",
-    "type": "Keyword",
-    "line_no": 10
-  },
-  {
-    "id_name": "100",
-    "data_type": "CONST",
-    "type": "Constant",
-    "line_no": 11
-  },
-  {
-    "id_name": "else",
-    "data_type": "N/A",
-    "type": "Keyword",
-    "line_no": 16
   }
 ]

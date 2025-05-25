@@ -2,14 +2,13 @@
 #include<string.h>
 
 int main() {
-    int x = 20;
+    int x;
     float f;
     int a=3;
-    a = x * 3 + 5;
-    int x = 21;
+    a = x *  + 5;
     if(x>a) {
         printf("Hi!");
-        a = x * 3 + 100;
+        a = x * + 100;
         if(x>a) {
             printf("Hi!");
             a = x * 3 + 100;

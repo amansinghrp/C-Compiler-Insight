@@ -1,3 +1,1 @@
-Semantic analysis completed with 1 error(s)
-	- Line 9: Redeclaration of "x"
-
+Semantic analysis completed with no errors
