@@ -1,10 +1,24 @@
 #include<stdio.h>
-int main(){
-	int a = 10;
-    while(a > 1){
-        printf("%d\n", a);
-        a = a-2;
+#include<string.h>
+
+int main() {
+    int x = 20;
+    float f;
+    int a=3;
+    a = x * 3 + 5;
+    int x = 21;
+    if(x>a) {
+        printf("Hi!");
+        a = x * 3 + 100;
+        if(x>a) {
+            printf("Hi!");
+            a = x * 3 + 100;
+        }
+        else {
+            x = a * 3 + 100;
+        }
     }
-    printf("End of program");
-    return 0;
+    else {
+        x = a * 3 + 100;
+    }
 }

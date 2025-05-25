@@ -8,9 +8,23 @@
   },
   {
     "SNo": 2,
-    "Token": "a",
+    "Token": "x",
     "Attribute": "Identifier",
     "AttributeNumber": 2,
     "MemoryLocation": 1004
+  },
+  {
+    "SNo": 3,
+    "Token": "f",
+    "Attribute": "Identifier",
+    "AttributeNumber": 3,
+    "MemoryLocation": 1008
+  },
+  {
+    "SNo": 4,
+    "Token": "a",
+    "Attribute": "Identifier",
+    "AttributeNumber": 4,
+    "MemoryLocation": 1012
   }
 ]
