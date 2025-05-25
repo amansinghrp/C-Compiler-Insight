@@ -1,7 +1,1 @@
-Semantic analysis completed with 3 error(s)
-	- Line 3: Variable "a" not declared!
-
-	- Line 4: Variable "a" not declared!
-
-	- Line 7: Variable "a" not declared!
-
+Semantic analysis completed with no errors

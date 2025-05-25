@@ -1,10 +1,12 @@
 #include<stdio.h>
 int main(){
-    if(a < 10){
-        a = 11;
+    int a = 10;
+    int b = 12;
+    if(a < b){
+        a = 10;
     }
     else{
-        a = 12;
+        b  = 12;
     }
     return 0;
 }
