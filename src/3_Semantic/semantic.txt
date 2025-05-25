@@ -1,15 +1,1 @@
-Semantic analysis completed with 7 error(s)
-	- Line 7: Variable "x" not declared!
-
-	- Line 8: Variable "x" not declared!
-
-	- Line 10: Variable "x" not declared!
-
-	- Line 11: Variable "x" not declared!
-
-	- Line 13: Variable "x" not declared!
-
-	- Line 16: Variable "x" not declared!
-
-	- Line 20: Variable "x" not declared!
-
+Semantic analysis completed with no errors
