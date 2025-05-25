@@ -329,9 +329,44 @@ int main(int argc, char *argv[]) {
     }
 
     yyparse();
-
-    printf("\n\t\t\t\t\t\tPHASE 3: SEMANTIC ANALYSIS\n\n");
-
+    printf("\n\t\t\tSymbol Table - Semantic Analysis\n");
+    printf("\n%-20s %-10s %-15s %-7s\n", "SYMBOL", "DATATYPE", "TYPE", "LINE_NO");
+    printf("--------------------------------------------------------\n");
+    for(int i=0; i<count; i++) {
+        printf("%-20s %-10s %-15s %-7d\n", 
+            symbol_table[i].id_name, 
+            symbol_table[i].data_type, 
+            symbol_table[i].type, 
+            symbol_table[i].line_no
+        );
+    }
+    printf("\n");
+    FILE *jf = fopen("symbol_table_semantic.json", "w");
+    if (jf) {
+        fprintf(jf, "[\n");
+        for (int i = 0; i < count; i++) {
+            fprintf(jf,
+                "  {\n"
+                "    \"id_name\": \"%s\",\n"
+                "    \"data_type\": \"%s\",\n"
+                "    \"type\": \"%s\",\n"
+                "    \"line_no\": %d\n"
+                "  }%s\n",
+                symbol_table[i].id_name,
+                symbol_table[i].data_type,
+                symbol_table[i].type,
+                symbol_table[i].line_no,
+                (i+1 < count) ? "," : ""
+            );
+        }
+        fprintf(jf, "]\n");
+    }
+    for(int i=0;i<count;i++) {
+        free(symbol_table[i].id_name);
+        free(symbol_table[i].type);
+    }
+    printf("\n\t\t\tPHASE 3: SEMANTIC ANALYSIS\n\n");
+    
     if (sem_errors > 0) {
         printf("Semantic analysis completed with %d error(s)\n", sem_errors);
         fprintf(yyout, "Semantic analysis completed with %d error(s)\n", sem_errors);
@@ -344,6 +379,7 @@ int main(int argc, char *argv[]) {
         fprintf(yyout, "Semantic analysis completed with no errors\n");
     }
 
+    fclose(jf);
     fclose(yyout);
     fclose(yyin);
     return 0;

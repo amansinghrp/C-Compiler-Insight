@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>C Compiler Insights</title>
@@ -10,6 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/eclipse.min.css">
 
 </head>
+
 <body>
     <h1>💻 C Compiler Insights</h1>
 
@@ -30,21 +32,21 @@
         <h3>Tokens</h3>
         <pre id="tokens"></pre>
     </div>
-    
+
     <div class="section">
-        <h2>Symbol Table</h2>
+        <h2>Symbol Table - Lexical Analysis</h2>
         <table id="symbolTable">
             <thead>
-            <tr>
-                <th>SNo</th>
-                <th>Token</th>
-                <th>Attribute</th>
-                <th>Attribute Number</th>
-                <th>Memory Location</th>
-            </tr>
+                <tr>
+                    <th>SNo</th>
+                    <th>Token</th>
+                    <th>Attribute</th>
+                    <th>Attribute Number</th>
+                    <th>Memory Location</th>
+                </tr>
             </thead>
             <tbody>
-            
+
             </tbody>
         </table>
     </div>
@@ -56,12 +58,31 @@
 
     <div class="section">
         <h2>Parse Tree</h2>
-        <img id="parseTreeImg" src="" alt="Parse Tree will appear here" style="max-width:100%; border:1px solid #ccc; padding:8px;">
+        <img id="parseTreeImg" src="" alt="Parse Tree will appear here"
+            style="max-width:100%; border:1px solid #ccc; padding:8px;">
     </div>
 
-     <div class="section">
+    <div class="section">
         <h2>Semantic Analysis Output</h2>
         <pre id="semanticOutput"></pre>
+    </div>
+
+    <div class="section">
+        <h2>Symbol Table - Semantic Analysis</h2>
+        <table id="semanticSymbolTable">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Identifier</th>
+                    <th>Data Type</th>
+                    <th>Kind</th>
+                    <th>Line No</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+            </tbody>
+        </table>
     </div>
 
 
@@ -104,15 +125,15 @@
                 const symbolTableData = data.symbol_table;
                 const tbody = document.querySelector("#symbolTable tbody");
                 symbolTableData.forEach(entry => {
-                const row = document.createElement("tr");
-                row.innerHTML = `
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
                     <td>${entry.SNo}</td>
                     <td>${entry.Token}</td>
                     <td>${entry.Attribute}</td>
                     <td>${entry.AttributeNumber}</td>
                     <td>${entry.MemoryLocation}</td>
                 `;
-                tbody.appendChild(row);
+                    tbody.appendChild(row);
                 });
                 document.getElementById('syntaxOutput').textContent = '';
             } else {
@@ -158,6 +179,21 @@
 
             if (res.ok) {
                 document.getElementById('semanticOutput').textContent = data.semantic_output;
+
+                const tbody = document.querySelector("#semanticSymbolTable tbody");
+                tbody.innerHTML = "";      
+
+                data.semantic_symbols.forEach((row, idx) => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${idx + 1}</td>
+                    <td>${row.id_name}</td>
+                    <td>${row.data_type}</td>
+                    <td>${row.type}</td>
+                    <td>${row.line_no}</td>
+                `;
+                tbody.appendChild(tr);
+                });
             } else {
                 alert('Semantic Analysis Error:\n' + (data.error || 'Unknown'));
             }
@@ -185,4 +221,5 @@
 
     </script>
 </body>
+
 </html>

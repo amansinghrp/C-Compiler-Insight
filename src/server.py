@@ -119,8 +119,17 @@ def semantic_analysis():
             semantic_output = f.read()
     except Exception as e:
         return jsonify({"error": f"Cannot read semantic.txt: {e}"}), 500
+    
+    try:
+        with open(os.path.join(BASE_DIR, 'symbol_table_semantic.json')) as f:
+            semantic_table = json.load(f)
+    except Exception as e:
+        return jsonify({"error": f"Failed to load semantic table: {e}"}), 500
 
-    return jsonify({"semantic_output": semantic_output})
+    return jsonify({
+        "semantic_output": semantic_output,
+        "semantic_symbols": semantic_table
+    })
 
 
 @app.route('/parse-tree', methods=['POST'])
