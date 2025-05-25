@@ -35,8 +35,8 @@
    especially those whose name start with YY_ or yy_.  They are
    private implementation details that can be changed or removed.  */
 
-#ifndef YY_YY_Y_TAB_H_INCLUDED
-# define YY_YY_Y_TAB_H_INCLUDED
+#ifndef YY_YY_PARSER_TAB_H_INCLUDED
+# define YY_YY_PARSER_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -88,61 +88,30 @@ extern int yydebug;
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
-/* Token kinds.  */
-#define YYEMPTY -2
-#define YYEOF 0
-#define YYerror 256
-#define YYUNDEF 257
-#define VOID 258
-#define CHARACTER 259
-#define PRINTFF 260
-#define SCANFF 261
-#define INT 262
-#define FLOAT 263
-#define CHAR 264
-#define FOR 265
-#define IF 266
-#define ELSE 267
-#define TRUE 268
-#define FALSE 269
-#define NUMBER 270
-#define FLOAT_NUM 271
-#define ID 272
-#define LE 273
-#define GE 274
-#define EQ 275
-#define NE 276
-#define GT 277
-#define LT 278
-#define AND 279
-#define OR 280
-#define STR 281
-#define ADD 282
-#define MULTIPLY 283
-#define DIVIDE 284
-#define SUBTRACT 285
-#define UNARY 286
-#define INCLUDE 287
-#define RETURN 288
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 49 "parser.y"
- struct var_name { 
-			char name[100]; 
-			struct node* nd;
-		} nd_obj;
+#line 53 "parser.y"
+ 
+    struct var_name { 
+        char name[100]; 
+        struct node* nd;
+    } nd_obj;
+    struct var_name2 { 
+        char name[100]; 
+        struct node* nd;
+        char type[10];
+    } nd_obj2; 
+    struct var_name3 {
+        char name[100];
+        struct node* nd;
+        char if_body[10];
+        char else_body[10];
+    } nd_obj3;
 
-		struct var_name2 { 
-			char name[100]; 
-			struct node* nd;
-			char type[5];
-		} nd_obj2; 
-	
-
-#line 146 "y.tab.h"
+#line 115 "parser.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -157,4 +126,4 @@ extern YYSTYPE yylval;
 int yyparse (void);
 
 
-#endif /* !YY_YY_Y_TAB_H_INCLUDED  */
+#endif /* !YY_YY_PARSER_TAB_H_INCLUDED  */

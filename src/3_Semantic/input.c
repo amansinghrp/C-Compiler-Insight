@@ -2,11 +2,10 @@
 #include<string.h>
 
 int main() {
-    int x=1;
+    int x;
     float f;
-    char a=3;
+    int a=3;
     a = x * 3 + 5;
-    char z = 15.6;
     if(x>a) {
         printf("Hi!");
         a = x * 3 + 100;
