@@ -3,7 +3,7 @@
     #include<string.h>
     #include<stdlib.h>
     #include<ctype.h>
-    
+    extern FILE *yyin;
     struct node { 
         struct node *left; 
         struct node *right; 
@@ -290,37 +290,22 @@ void visualize_parse_tree() {
     system("dot -Tpng parse_tree.dot -o parse_tree.png");
 }
 
-int main() {
+int main(int argc, char *argv[]) {
+    if (argc < 2) {
+        fprintf(stderr, "Usage: %s <input_file>\n", argv[0]);
+        return 1;
+    }
+
+    yyin = fopen(argv[1], "r");
+    if (!yyin) {
+        perror(argv[1]);
+        return 1;
+    }
     yyparse();
     visualize_parse_tree();
-    
-    printf("\n\n\t\t\t\t\t\t\t\t PHASE 1: LEXICAL ANALYSIS \n\n");
-    printf("\n%-20s %-10s %-15s %-7s\n", "SYMBOL", "DATATYPE", "TYPE", "LINE_NO");
-    printf("--------------------------------------------------------\n");
-    for(int i=0; i<count; i++) {
-        printf("%-20s %-10s %-15s %-7d\n", 
-            symbol_table[i].id_name, 
-            symbol_table[i].data_type, 
-            symbol_table[i].type, 
-            symbol_table[i].line_no
-        );
-    }
-    for(int i=0;i<count;i++) {
-        free(symbol_table[i].id_name);
-        free(symbol_table[i].type);
-    }
-    printf("\n\n\t\t\t\t\t\t\t\t PHASE 2: SYNTAX ANALYSIS \n\n");
+    printf("\t\t\t\t\t\t\t\t PHASE 2: SYNTAX ANALYSIS \n\n");
     print_tree(head); 
-    printf("\n\n\n\n\t\t\t\t\t\t\t\t PHASE 3: SEMANTIC ANALYSIS \n\n");
-    if(sem_errors>0) {
-        printf("Semantic analysis completed with %d errors\n", sem_errors);
-        for(int i=0; i<sem_errors; i++) printf("\t - %s", errors[i]);
-    } else {
-        printf("Semantic analysis completed with no errors");
-    }
-    printf("\n\n\t\t\t\t\t\t\t   PHASE 4: INTERMEDIATE CODE GENERATION \n\n");
-    for(int i=0; i<ic_idx; i++) printf("%s", icg[i]);
-    printf("\n\n");
+    printf("\n");
 }
 
 int search(char *type) {

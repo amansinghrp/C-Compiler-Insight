@@ -67,13 +67,13 @@
 
 
 /* First part of user prologue.  */
-#line 1 "pracer.y"
+#line 1 "parser.y"
 
     #include<stdio.h>
     #include<string.h>
     #include<stdlib.h>
     #include<ctype.h>
-    
+    extern FILE *yyin;
     struct node { 
         struct node *left; 
         struct node *right; 
@@ -1243,7 +1243,7 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* program: headers main '(' ')' '{' body return '}'  */
-#line 78 "pracer.y"
+#line 78 "parser.y"
                                                   { 
     (yyvsp[-6].nd_obj).nd = mknode((yyvsp[-2].nd_obj).nd, (yyvsp[-1].nd_obj).nd, "main"); 
     (yyval.nd_obj).nd = mknode((yyvsp[-7].nd_obj).nd, (yyvsp[-6].nd_obj).nd, "program"); 
@@ -1253,61 +1253,61 @@ yyreduce:
     break;
 
   case 3: /* headers: headers headers  */
-#line 85 "pracer.y"
+#line 85 "parser.y"
                          { (yyval.nd_obj).nd = mknode((yyvsp[-1].nd_obj).nd, (yyvsp[0].nd_obj).nd, "headers"); }
 #line 1259 "parser.tab.c"
     break;
 
   case 4: /* $@1: %empty  */
-#line 86 "pracer.y"
+#line 86 "parser.y"
           { add('H'); }
 #line 1265 "parser.tab.c"
     break;
 
   case 5: /* headers: INCLUDE $@1  */
-#line 86 "pracer.y"
+#line 86 "parser.y"
                         { (yyval.nd_obj).nd = mknode(NULL, NULL, (yyvsp[-1].nd_obj).name); }
 #line 1271 "parser.tab.c"
     break;
 
   case 6: /* main: datatype ID  */
-#line 89 "pracer.y"
+#line 89 "parser.y"
                   { add('F'); }
 #line 1277 "parser.tab.c"
     break;
 
   case 7: /* datatype: INT  */
-#line 92 "pracer.y"
+#line 92 "parser.y"
               { insert_type(); }
 #line 1283 "parser.tab.c"
     break;
 
   case 8: /* datatype: FLOAT  */
-#line 93 "pracer.y"
+#line 93 "parser.y"
         { insert_type(); }
 #line 1289 "parser.tab.c"
     break;
 
   case 9: /* datatype: CHAR  */
-#line 94 "pracer.y"
+#line 94 "parser.y"
        { insert_type(); }
 #line 1295 "parser.tab.c"
     break;
 
   case 10: /* datatype: VOID  */
-#line 95 "pracer.y"
+#line 95 "parser.y"
        { insert_type(); }
 #line 1301 "parser.tab.c"
     break;
 
   case 11: /* $@2: %empty  */
-#line 98 "pracer.y"
+#line 98 "parser.y"
           { add('K'); is_for = 1; }
 #line 1307 "parser.tab.c"
     break;
 
   case 12: /* body: FOR $@2 '(' statement ';' condition ';' statement ')' '{' body '}'  */
-#line 98 "pracer.y"
+#line 98 "parser.y"
                                                                                                { 
     struct node *temp = mknode((yyvsp[-6].nd_obj3).nd, (yyvsp[-4].nd_obj).nd, "CONDITION"); 
     struct node *temp2 = mknode((yyvsp[-8].nd_obj).nd, temp, "CONDITION"); 
@@ -1320,25 +1320,25 @@ yyreduce:
     break;
 
   case 13: /* $@3: %empty  */
-#line 106 "pracer.y"
+#line 106 "parser.y"
      { add('K'); is_for = 0; }
 #line 1326 "parser.tab.c"
     break;
 
   case 14: /* $@4: %empty  */
-#line 106 "pracer.y"
+#line 106 "parser.y"
                                                  { sprintf(icg[ic_idx++], "\nLABEL %s:\n", (yyvsp[-1].nd_obj3).if_body); }
 #line 1332 "parser.tab.c"
     break;
 
   case 15: /* $@5: %empty  */
-#line 106 "pracer.y"
+#line 106 "parser.y"
                                                                                                                        { sprintf(icg[ic_idx++], "\nLABEL %s:\n", (yyvsp[-5].nd_obj3).else_body); }
 #line 1338 "parser.tab.c"
     break;
 
   case 16: /* body: IF $@3 '(' condition ')' $@4 '{' body '}' $@5 else  */
-#line 106 "pracer.y"
+#line 106 "parser.y"
                                                                                                                                                                                        { 
     struct node *iff = mknode((yyvsp[-7].nd_obj3).nd, (yyvsp[-3].nd_obj).nd, (yyvsp[-10].nd_obj).name); 
     (yyval.nd_obj).nd = mknode(iff, (yyvsp[0].nd_obj).nd, "if-else"); 
@@ -1348,61 +1348,61 @@ yyreduce:
     break;
 
   case 17: /* body: statement ';'  */
-#line 111 "pracer.y"
+#line 111 "parser.y"
                 { (yyval.nd_obj).nd = (yyvsp[-1].nd_obj).nd; }
 #line 1354 "parser.tab.c"
     break;
 
   case 18: /* body: body body  */
-#line 112 "pracer.y"
+#line 112 "parser.y"
             { (yyval.nd_obj).nd = mknode((yyvsp[-1].nd_obj).nd, (yyvsp[0].nd_obj).nd, "statements"); }
 #line 1360 "parser.tab.c"
     break;
 
   case 19: /* $@6: %empty  */
-#line 113 "pracer.y"
+#line 113 "parser.y"
           { add('K'); }
 #line 1366 "parser.tab.c"
     break;
 
   case 20: /* body: PRINTFF $@6 '(' STR ')' ';'  */
-#line 113 "pracer.y"
+#line 113 "parser.y"
                                         { (yyval.nd_obj).nd = mknode(NULL, NULL, "printf"); }
 #line 1372 "parser.tab.c"
     break;
 
   case 21: /* $@7: %empty  */
-#line 114 "pracer.y"
+#line 114 "parser.y"
          { add('K'); }
 #line 1378 "parser.tab.c"
     break;
 
   case 22: /* body: SCANFF $@7 '(' STR ',' '&' ID ')' ';'  */
-#line 114 "pracer.y"
+#line 114 "parser.y"
                                                   { (yyval.nd_obj).nd = mknode(NULL, NULL, "scanf"); }
 #line 1384 "parser.tab.c"
     break;
 
   case 23: /* $@8: %empty  */
-#line 117 "pracer.y"
+#line 117 "parser.y"
            { add('K'); }
 #line 1390 "parser.tab.c"
     break;
 
   case 24: /* else: ELSE $@8 '{' body '}'  */
-#line 117 "pracer.y"
+#line 117 "parser.y"
                                       { (yyval.nd_obj).nd = mknode(NULL, (yyvsp[-1].nd_obj).nd, (yyvsp[-4].nd_obj).name); }
 #line 1396 "parser.tab.c"
     break;
 
   case 25: /* else: %empty  */
-#line 118 "pracer.y"
+#line 118 "parser.y"
   { (yyval.nd_obj).nd = NULL; }
 #line 1402 "parser.tab.c"
     break;
 
   case 26: /* condition: value relop value  */
-#line 121 "pracer.y"
+#line 121 "parser.y"
                              { 
     (yyval.nd_obj3).nd = mknode((yyvsp[-2].nd_obj2).nd, (yyvsp[0].nd_obj2).nd, (yyvsp[-1].nd_obj).name); 
     if(is_for) {
@@ -1420,31 +1420,31 @@ yyreduce:
     break;
 
   case 27: /* condition: TRUE  */
-#line 134 "pracer.y"
+#line 134 "parser.y"
        { add('K'); (yyval.nd_obj3).nd = NULL; }
 #line 1426 "parser.tab.c"
     break;
 
   case 28: /* condition: FALSE  */
-#line 135 "pracer.y"
+#line 135 "parser.y"
         { add('K'); (yyval.nd_obj3).nd = NULL; }
 #line 1432 "parser.tab.c"
     break;
 
   case 29: /* condition: %empty  */
-#line 136 "pracer.y"
+#line 136 "parser.y"
   { (yyval.nd_obj3).nd = NULL; }
 #line 1438 "parser.tab.c"
     break;
 
   case 30: /* $@9: %empty  */
-#line 139 "pracer.y"
+#line 139 "parser.y"
                        { add('V'); }
 #line 1444 "parser.tab.c"
     break;
 
   case 31: /* statement: datatype ID $@9 init  */
-#line 139 "pracer.y"
+#line 139 "parser.y"
                                           { 
     (yyvsp[-2].nd_obj).nd = mknode(NULL, NULL, (yyvsp[-2].nd_obj).name); 
     int t = check_types((yyvsp[-3].nd_obj).name, (yyvsp[0].nd_obj2).type); 
@@ -1467,13 +1467,13 @@ yyreduce:
     break;
 
   case 32: /* $@10: %empty  */
-#line 157 "pracer.y"
+#line 157 "parser.y"
      { check_declaration((yyvsp[0].nd_obj).name); }
 #line 1473 "parser.tab.c"
     break;
 
   case 33: /* statement: ID $@10 '=' expression  */
-#line 157 "pracer.y"
+#line 157 "parser.y"
                                                     {
     (yyvsp[-3].nd_obj).nd = mknode(NULL, NULL, (yyvsp[-3].nd_obj).name); 
     char *id_type = get_type((yyvsp[-3].nd_obj).name); 
@@ -1502,25 +1502,25 @@ yyreduce:
     break;
 
   case 34: /* $@11: %empty  */
-#line 181 "pracer.y"
+#line 181 "parser.y"
      { check_declaration((yyvsp[0].nd_obj).name); }
 #line 1508 "parser.tab.c"
     break;
 
   case 35: /* statement: ID $@11 relop expression  */
-#line 181 "pracer.y"
+#line 181 "parser.y"
                                                       { (yyvsp[-3].nd_obj).nd = mknode(NULL, NULL, (yyvsp[-3].nd_obj).name); (yyval.nd_obj).nd = mknode((yyvsp[-3].nd_obj).nd, (yyvsp[0].nd_obj2).nd, (yyvsp[-1].nd_obj).name); }
 #line 1514 "parser.tab.c"
     break;
 
   case 36: /* $@12: %empty  */
-#line 182 "pracer.y"
+#line 182 "parser.y"
      { check_declaration((yyvsp[0].nd_obj).name); }
 #line 1520 "parser.tab.c"
     break;
 
   case 37: /* statement: ID $@12 UNARY  */
-#line 182 "pracer.y"
+#line 182 "parser.y"
                                            { 
     (yyvsp[-2].nd_obj).nd = mknode(NULL, NULL, (yyvsp[-2].nd_obj).name); 
     (yyvsp[0].nd_obj).nd = mknode(NULL, NULL, (yyvsp[0].nd_obj).name); 
@@ -1540,7 +1540,7 @@ yyreduce:
     break;
 
   case 38: /* statement: UNARY ID  */
-#line 197 "pracer.y"
+#line 197 "parser.y"
            { 
     check_declaration((yyvsp[0].nd_obj).name); 
     (yyvsp[-1].nd_obj).nd = mknode(NULL, NULL, (yyvsp[-1].nd_obj).name); 
@@ -1561,19 +1561,19 @@ yyreduce:
     break;
 
   case 39: /* init: '=' value  */
-#line 215 "pracer.y"
+#line 215 "parser.y"
                 { (yyval.nd_obj2).nd = (yyvsp[0].nd_obj2).nd; sprintf((yyval.nd_obj2).type, "%s", (yyvsp[0].nd_obj2).type); strcpy((yyval.nd_obj2).name, (yyvsp[0].nd_obj2).name); }
 #line 1567 "parser.tab.c"
     break;
 
   case 40: /* init: %empty  */
-#line 216 "pracer.y"
+#line 216 "parser.y"
   { sprintf((yyval.nd_obj2).type, "null"); (yyval.nd_obj2).nd = mknode(NULL, NULL, "NULL"); strcpy((yyval.nd_obj2).name, "NULL"); }
 #line 1573 "parser.tab.c"
     break;
 
   case 41: /* expression: expression arithmetic expression  */
-#line 219 "pracer.y"
+#line 219 "parser.y"
                                              { 
     if(!strcmp((yyvsp[-2].nd_obj2).type, (yyvsp[0].nd_obj2).type)) {
         sprintf((yyval.nd_obj2).type, "%s", (yyvsp[-2].nd_obj2).type);
@@ -1599,49 +1599,49 @@ yyreduce:
     break;
 
   case 42: /* expression: value  */
-#line 240 "pracer.y"
+#line 240 "parser.y"
         { strcpy((yyval.nd_obj2).name, (yyvsp[0].nd_obj2).name); sprintf((yyval.nd_obj2).type, "%s", (yyvsp[0].nd_obj2).type); (yyval.nd_obj2).nd = (yyvsp[0].nd_obj2).nd; }
 #line 1605 "parser.tab.c"
     break;
 
   case 53: /* value: NUMBER  */
-#line 257 "pracer.y"
+#line 257 "parser.y"
               { strcpy((yyval.nd_obj2).name, (yyvsp[0].nd_obj).name); sprintf((yyval.nd_obj2).type, "int"); add('C'); (yyval.nd_obj2).nd = mknode(NULL, NULL, (yyvsp[0].nd_obj).name); }
 #line 1611 "parser.tab.c"
     break;
 
   case 54: /* value: FLOAT_NUM  */
-#line 258 "pracer.y"
+#line 258 "parser.y"
             { strcpy((yyval.nd_obj2).name, (yyvsp[0].nd_obj).name); sprintf((yyval.nd_obj2).type, "float"); add('C'); (yyval.nd_obj2).nd = mknode(NULL, NULL, (yyvsp[0].nd_obj).name); }
 #line 1617 "parser.tab.c"
     break;
 
   case 55: /* value: CHARACTER  */
-#line 259 "pracer.y"
+#line 259 "parser.y"
             { strcpy((yyval.nd_obj2).name, (yyvsp[0].nd_obj).name); sprintf((yyval.nd_obj2).type, "char"); add('C'); (yyval.nd_obj2).nd = mknode(NULL, NULL, (yyvsp[0].nd_obj).name); }
 #line 1623 "parser.tab.c"
     break;
 
   case 56: /* value: ID  */
-#line 260 "pracer.y"
+#line 260 "parser.y"
      { strcpy((yyval.nd_obj2).name, (yyvsp[0].nd_obj).name); char *id_type = get_type((yyvsp[0].nd_obj).name); sprintf((yyval.nd_obj2).type, "%s", id_type); check_declaration((yyvsp[0].nd_obj).name); (yyval.nd_obj2).nd = mknode(NULL, NULL, (yyvsp[0].nd_obj).name); }
 #line 1629 "parser.tab.c"
     break;
 
   case 57: /* $@13: %empty  */
-#line 263 "pracer.y"
+#line 263 "parser.y"
                { add('K'); }
 #line 1635 "parser.tab.c"
     break;
 
   case 58: /* return: RETURN $@13 value ';'  */
-#line 263 "pracer.y"
+#line 263 "parser.y"
                                        { check_return_type((yyvsp[-1].nd_obj2).name); (yyvsp[-3].nd_obj).nd = mknode(NULL, NULL, "return"); (yyval.nd_obj).nd = mknode((yyvsp[-3].nd_obj).nd, (yyvsp[-1].nd_obj2).nd, "RETURN"); }
 #line 1641 "parser.tab.c"
     break;
 
   case 59: /* return: %empty  */
-#line 264 "pracer.y"
+#line 264 "parser.y"
   { (yyval.nd_obj).nd = NULL; }
 #line 1647 "parser.tab.c"
     break;
@@ -1840,7 +1840,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 267 "pracer.y"
+#line 267 "parser.y"
 
 
 void generate_dot(FILE *fp, struct node *node) {
@@ -1867,37 +1867,22 @@ void visualize_parse_tree() {
     system("dot -Tpng parse_tree.dot -o parse_tree.png");
 }
 
-int main() {
+int main(int argc, char *argv[]) {
+    if (argc < 2) {
+        fprintf(stderr, "Usage: %s <input_file>\n", argv[0]);
+        return 1;
+    }
+
+    yyin = fopen(argv[1], "r");
+    if (!yyin) {
+        perror(argv[1]);
+        return 1;
+    }
     yyparse();
     visualize_parse_tree();
-    
-    printf("\n\n\t\t\t\t\t\t\t\t PHASE 1: LEXICAL ANALYSIS \n\n");
-    printf("\n%-20s %-10s %-15s %-7s\n", "SYMBOL", "DATATYPE", "TYPE", "LINE_NO");
-    printf("--------------------------------------------------------\n");
-    for(int i=0; i<count; i++) {
-        printf("%-20s %-10s %-15s %-7d\n", 
-            symbol_table[i].id_name, 
-            symbol_table[i].data_type, 
-            symbol_table[i].type, 
-            symbol_table[i].line_no
-        );
-    }
-    for(int i=0;i<count;i++) {
-        free(symbol_table[i].id_name);
-        free(symbol_table[i].type);
-    }
-    printf("\n\n\t\t\t\t\t\t\t\t PHASE 2: SYNTAX ANALYSIS \n\n");
+    printf("\t\t\t\t\t\t\t\t PHASE 2: SYNTAX ANALYSIS \n\n");
     print_tree(head); 
-    printf("\n\n\n\n\t\t\t\t\t\t\t\t PHASE 3: SEMANTIC ANALYSIS \n\n");
-    if(sem_errors>0) {
-        printf("Semantic analysis completed with %d errors\n", sem_errors);
-        for(int i=0; i<sem_errors; i++) printf("\t - %s", errors[i]);
-    } else {
-        printf("Semantic analysis completed with no errors");
-    }
-    printf("\n\n\t\t\t\t\t\t\t   PHASE 4: INTERMEDIATE CODE GENERATION \n\n");
-    for(int i=0; i<ic_idx; i++) printf("%s", icg[i]);
-    printf("\n\n");
+    printf("\n");
 }
 
 int search(char *type) {
