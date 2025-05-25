@@ -72,6 +72,7 @@
 %token <nd_obj> CHARACTER PRINTFF SCANFF INT FLOAT CHAR FOR IF ELSE TRUE FALSE NUMBER FLOAT_NUM ID LE GE EQ NE GT LT AND OR STR ADD MULTIPLY DIVIDE SUBTRACT UNARY INCLUDE RETURN 
 %type <nd_obj> headers main body return datatype statement arithmetic relop program else
 %type <nd_obj2> init value expression
+%type <nd_obj> printf_args opt_printf_args
 %type <nd_obj3> condition
 
 %%
@@ -111,12 +112,37 @@ body: FOR { add('K'); is_for = 1; } '(' statement ';' condition ';' statement ')
 }
 | statement ';' { $$.nd = $1.nd; }
 | body body { $$.nd = mknode($1.nd, $2.nd, "statements"); }
-| PRINTFF { add('K'); } '(' STR ')' ';' { $$.nd = mknode(NULL, NULL, "printf"); }
+| PRINTFF { add('K'); }
+    '(' STR opt_printf_args ')' ';'
+    {
+      struct node *strNode = mknode(NULL, NULL, $4.name);
+      struct node *argsNode = $5.nd;          
+      $$.nd = mknode(strNode, argsNode, "printf");
+    }
+
 | SCANFF { add('K'); } '(' STR ',' '&' ID ')' ';' { $$.nd = mknode(NULL, NULL, "scanf"); }
 ;
 
 else: ELSE { add('K'); } '{' body '}' { $$.nd = mknode(NULL, $4.nd, $1.name); }
 | { $$.nd = NULL; }
+;
+opt_printf_args
+  :                { $$.nd = NULL; }
+  | ',' printf_args { $$.nd = $2.nd; }
+;
+printf_args
+  : expression
+      { 
+        /* leaf node for a single argument */
+        $$.nd = mknode(NULL, $1.nd, "arg");  
+      }
+  | printf_args ',' expression
+      {
+        /* append another arg to the right */
+        struct node *leftList = $1.nd;
+        struct node *newArg   = mknode(NULL, $3.nd, "arg");
+        $$.nd = mknode(leftList, newArg, "args");
+      }
 ;
 
 condition: value relop value { 
