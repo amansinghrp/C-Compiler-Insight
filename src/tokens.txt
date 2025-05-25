@@ -7,26 +7,54 @@ a	Identifier	3
 =	Operator	3
 10	Constant	3
 ;	Special Character	3
-if	Keyword	4
+scanf	Pre Defined Function	4
 (	Special Character	4
-a	Identifier	4
-<	Operator	4
-10	Constant	4
+"	Special Character	4
+%d	Format Specifier	4
+"	Special Character	4
+, &	Variable Location	4
+b	Identifier	4
 )	Special Character	4
-{	Special Character	4
+;	Special Character	4
+if	Keyword	5
+(	Special Character	5
 a	Identifier	5
-=	Operator	5
-11	Constant	5
-;	Special Character	5
-}	Special Character	6
-else	Keyword	7
-{	Special Character	7
-a	Identifier	8
-=	Operator	8
-12	Constant	8
-;	Special Character	8
-}	Special Character	9
-return	Keyword	10
-0	Constant	10
-;	Special Character	10
-}	Special Character	11
+<	Operator	5
+b	Identifier	5
+)	Special Character	5
+{	Special Character	5
+printf	Pre Defined Function	6
+(	Special Character	6
+"	Special Character	6
+b	Identifier	6
+is	Identifier	6
+large	Identifier	6
+"	Special Character	6
+)	Special Character	6
+;	Special Character	6
+}	Special Character	7
+else	Keyword	8
+{	Special Character	8
+printf	Pre Defined Function	9
+(	Special Character	9
+"	Special Character	9
+a	Identifier	9
+is	Identifier	9
+large	Identifier	9
+"	Special Character	9
+)	Special Character	9
+;	Special Character	9
+}	Special Character	10
+printf	Pre Defined Function	11
+(	Special Character	11
+"	Special Character	11
+End	Identifier	11
+of	Identifier	11
+program	Identifier	11
+"	Special Character	11
+)	Special Character	11
+;	Special Character	11
+return	Keyword	12
+0	Constant	12
+;	Special Character	12
+}	Special Character	13

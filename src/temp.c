@@ -1,10 +1,14 @@
 #include<stdio.h>
 int main(){
-    if(a < 10){
-        a = 11;
+	int a = 10;
+    int b;
+    scanf("%d", &b);
+    if(a < b){
+    	printf("b is large");
     }
     else{
-        a = 12;
+    	printf("a is large");
     }
+    printf("End of program");
     return 0;
 }
