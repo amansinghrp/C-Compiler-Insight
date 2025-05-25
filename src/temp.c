@@ -1,12 +1,10 @@
-// Write your C code here...
 #include<stdio.h>
-#define x 3
-void main()
-{
-	int a=4,b=5;
-	while(a<10)
-	{
-		a=a+1;
-		b=b-1;
-	}
+int main(){
+    if(a < 10){
+        a = 11;
+    }
+    else{
+        a = 12;
+    }
+    return 0;
 }

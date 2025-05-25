@@ -21,6 +21,8 @@
     <div class="section">
         <button onclick="runLexical()">Lexical Analysis</button>
         <button onclick="runSyntax()">Syntax Analysis</button>
+        <button onclick="runParseTree()">Show Parse Tree</button>
+        <button onclick="runSemantic()">Semantic Analysis</button>
     </div>
 
     <div class="section">
@@ -50,6 +52,16 @@
     <div class="section">
         <h2>Syntax Analysis Output</h2>
         <pre id="syntaxOutput"></pre>
+    </div>
+
+    <div class="section">
+        <h2>Parse Tree</h2>
+        <img id="parseTreeImg" src="" alt="Parse Tree will appear here" style="max-width:100%; border:1px solid #ccc; padding:8px;">
+    </div>
+
+     <div class="section">
+        <h2>Semantic Analysis Output</h2>
+        <pre id="semanticOutput"></pre>
     </div>
 
 
@@ -134,6 +146,42 @@
             }
         }
 
+        async function runSemantic() {
+            const code = editor.getValue().trim();
+            if (!code) { alert('Please enter some C code first.'); return; }
+
+            const form = new FormData();
+            form.append('code', code);
+
+            const res = await fetch('/semantic', { method: 'POST', body: form });
+            const data = await res.json();
+
+            if (res.ok) {
+                document.getElementById('semanticOutput').textContent = data.semantic_output;
+            } else {
+                alert('Semantic Analysis Error:\n' + (data.error || 'Unknown'));
+            }
+        }
+
+        async function runParseTree() {
+            const code = editor.getValue().trim();
+            if (!code) { alert('Please enter some C code first.'); return; }
+
+            const form = new FormData();
+            form.append('code', code);
+
+            const res = await fetch('/parse-tree', { method: 'POST', body: form });
+            const data = await res.json();
+
+            if (res.ok) {
+                // set the <img> src to the returned URL,
+                // and bust cache with a timestamp query
+                const img = document.getElementById('parseTreeImg');
+                img.src = data.parse_tree_url + '?t=' + new Date().getTime();
+            } else {
+                alert('Parse-Tree Error:\n' + (data.error || 'Unknown'));
+            }
+        }
 
     </script>
 </body>
