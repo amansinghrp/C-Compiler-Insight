@@ -3,10 +3,9 @@
 
 int main() {
     int x;
-    float f;
     int a=3;
-    while(a > 0){
-    	a = a-1;
+    if(x>a) {
+        printf("Hi!");
+        a = x + 100;
     }
-    return 0;
 }

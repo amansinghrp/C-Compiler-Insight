@@ -6,29 +6,31 @@ main()	Main Function	4
 int	Keyword	5
 x	Identifier	5
 ;	Special Character	5
-float	Keyword	6
-f	Identifier	6
+int	Keyword	6
+a	Identifier	6
+=	Operator	6
+3	Constant	6
 ;	Special Character	6
-int	Keyword	7
+if	Keyword	7
+(	Special Character	7
+x	Identifier	7
+>	Operator	7
 a	Identifier	7
-=	Operator	7
-3	Constant	7
-;	Special Character	7
-while	Keyword	8
+)	Special Character	7
+{	Special Character	7
+printf	Pre Defined Function	8
 (	Special Character	8
-a	Identifier	8
->	Operator	8
-0	Constant	8
+"	Special Character	8
+Hi	Identifier	8
+!	Operator	8
+"	Special Character	8
 )	Special Character	8
-{	Special Character	8
+;	Special Character	8
 a	Identifier	9
 =	Operator	9
-a	Identifier	9
--	Operator	9
-1	Constant	9
+x	Identifier	9
++	Operator	9
+100	Constant	9
 ;	Special Character	9
 }	Special Character	10
-return	Keyword	11
-0	Constant	11
-;	Special Character	11
-}	Special Character	12
+}	Special Character	11

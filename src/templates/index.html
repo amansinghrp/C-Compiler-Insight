@@ -115,6 +115,35 @@
             autoCloseBrackets: true
         });
         editor.setSize("100%", "400px");
+
+        //to track any chnaged made to the code editor
+        let isDirty = false;
+
+        // whenever the user types, mark the buffer dirty
+        editor.on('change', () => {
+            isDirty = true;
+            // optional: remove the active highlight while they’re editing
+            document.querySelectorAll('button').forEach(btn => btn.classList.remove('active-button'));
+        });
+
+        //function to clear all output
+        function clearAllOutputs() {
+            // Lexical
+            document.getElementById('tokens').textContent = '';
+            document.querySelector('#symbolTable tbody').innerHTML = '';
+
+            // Syntax
+            document.getElementById('syntaxOutput').textContent = '';
+
+            // Parse tree
+            document.getElementById('parseTreeImg').src = '';
+
+            // Semantic
+            document.getElementById('semanticOutput').textContent = '';
+            document.querySelector('#semanticSymbolTable tbody').innerHTML = '';
+        }
+
+
         function highlightButtonAndScroll(btnId, sectionId) {
             // Remove active class from all buttons
             document.querySelectorAll('button').forEach(btn => btn.classList.remove('active-button'));
@@ -127,6 +156,10 @@
         }
 
         async function runLexical() {
+            if (isDirty) {
+                clearAllOutputs();
+                isDirty = false;
+            }
             const code = editor.getValue();
             if (!code.trim()) {
                 alert('Please enter some C code first.');
@@ -165,6 +198,10 @@
         }
 
         async function runSyntax() {
+            if (isDirty) {
+                clearAllOutputs();
+                isDirty = false;
+            }
             const code = editor.getValue();
             if (!code.trim()) {
                 alert('Please enter some C code first.');
@@ -190,6 +227,10 @@
         }
 
         async function runSemantic() {
+            if (isDirty) {
+                clearAllOutputs();
+                isDirty = false;
+            }
             const code = editor.getValue().trim();
             if (!code) { alert('Please enter some C code first.'); return; }
 
@@ -223,6 +264,10 @@
         }
 
         async function runParseTree() {
+            if (isDirty) {
+                clearAllOutputs();
+                isDirty = false;
+            }
             const code = editor.getValue().trim();
             if (!code) { alert('Please enter some C code first.'); return; }
 
