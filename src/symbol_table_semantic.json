@@ -6,51 +6,21 @@
     "line_no": 0
   },
   {
-    "id_name": "#include<string.h>",
-    "data_type": "",
-    "type": "Header",
-    "line_no": 1
-  },
-  {
     "id_name": "main",
     "data_type": "int",
     "type": "Constant",
-    "line_no": 3
-  },
-  {
-    "id_name": "x",
-    "data_type": "int",
-    "type": "Variable",
-    "line_no": 4
+    "line_no": 1
   },
   {
     "id_name": "a",
     "data_type": "int",
     "type": "Variable",
-    "line_no": 5
+    "line_no": 2
   },
   {
-    "id_name": "3",
+    "id_name": "10",
     "data_type": "CONST",
     "type": "Constant",
-    "line_no": 5
-  },
-  {
-    "id_name": "if",
-    "data_type": "N/A",
-    "type": "Keyword",
-    "line_no": 6
-  },
-  {
-    "id_name": "printf",
-    "data_type": "N/A",
-    "type": "Keyword",
-    "line_no": 7
-  },
-  {
-    "id_name": "100",
-    "data_type": "CONST",
-    "type": "Constant",
-    "line_no": 8
+    "line_no": 2
   }
 ]
