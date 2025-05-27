@@ -9,6 +9,12 @@
     <!-- CodeMirror Styles -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/eclipse.min.css">
+    <style>
+        .active-button {
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
 
 </head>
 
@@ -21,69 +27,75 @@
     </div>
 
     <div class="section">
-        <button onclick="runLexical()">Lexical Analysis</button>
-        <button onclick="runSyntax()">Syntax Analysis</button>
-        <button onclick="runParseTree()">Show Parse Tree</button>
-        <button onclick="runSemantic()">Semantic Analysis</button>
+        <button id="btnLexical" onclick="runLexical()">Lexical Analysis</button>
+        <button id="btnSyntax" onclick="runSyntax()">Syntax Analysis</button>
+        <button id="btnParseTree" onclick="runParseTree()">Show Parse Tree</button>
+        <button id="btnSemantic" onclick="runSemantic()">Semantic Analysis</button>
+    </div>
+    <div id="lexicalOp">
+        <div class="section">
+            <h2>Lexical Analysis Output</h2>
+            <h3>Tokens</h3>
+            <pre id="tokens"></pre>
+        </div>
+    
+        <div class="section">
+            <h2>Symbol Table - Lexical Analysis</h2>
+            <table id="symbolTable">
+                <thead>
+                    <tr>
+                        <th>SNo</th>
+                        <th>Token</th>
+                        <th>Attribute</th>
+                        <th>Attribute Number</th>
+                        <th>Memory Location</th>
+                    </tr>
+                </thead>
+                <tbody>
+    
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div id="syntaxOp">
+        <div class="section">
+            <h2>Syntax Analysis Output</h2>
+            <pre id="syntaxOutput"></pre>
+        </div>
     </div>
 
-    <div class="section">
-        <h2>Lexical Analysis Output</h2>
-        <h3>Tokens</h3>
-        <pre id="tokens"></pre>
+    <div id="parseOp">
+        <div class="section">
+            <h2>Parse Tree</h2>
+            <img id="parseTreeImg" src="" alt="Parse Tree will appear here"
+                style="max-width:100%; border:1px solid #ccc; padding:8px;">
+        </div>
     </div>
 
-    <div class="section">
-        <h2>Symbol Table - Lexical Analysis</h2>
-        <table id="symbolTable">
-            <thead>
-                <tr>
-                    <th>SNo</th>
-                    <th>Token</th>
-                    <th>Attribute</th>
-                    <th>Attribute Number</th>
-                    <th>Memory Location</th>
-                </tr>
-            </thead>
-            <tbody>
-
-            </tbody>
-        </table>
+    <div id="semanticOp">
+        <div class="section">
+            <h2>Semantic Analysis Output</h2>
+            <pre id="semanticOutput"></pre>
+        </div>
+        <div class="section">
+            <h2>Symbol Table - Semantic Analysis</h2>
+            <table id="semanticSymbolTable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Identifier</th>
+                        <th>Data Type</th>
+                        <th>Kind</th>
+                        <th>Line No</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+            </table>
+        </div>
     </div>
 
-    <div class="section">
-        <h2>Syntax Analysis Output</h2>
-        <pre id="syntaxOutput"></pre>
-    </div>
-
-    <div class="section">
-        <h2>Parse Tree</h2>
-        <img id="parseTreeImg" src="" alt="Parse Tree will appear here"
-            style="max-width:100%; border:1px solid #ccc; padding:8px;">
-    </div>
-
-    <div class="section">
-        <h2>Semantic Analysis Output</h2>
-        <pre id="semanticOutput"></pre>
-    </div>
-
-    <div class="section">
-        <h2>Symbol Table - Semantic Analysis</h2>
-        <table id="semanticSymbolTable">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Identifier</th>
-                    <th>Data Type</th>
-                    <th>Kind</th>
-                    <th>Line No</th>
-                </tr>
-            </thead>
-            <tbody>
-                
-            </tbody>
-        </table>
-    </div>
 
 
     <!-- CodeMirror Scripts -->
@@ -103,6 +115,17 @@
             autoCloseBrackets: true
         });
         editor.setSize("100%", "400px");
+        function highlightButtonAndScroll(btnId, sectionId) {
+            // Remove active class from all buttons
+            document.querySelectorAll('button').forEach(btn => btn.classList.remove('active-button'));
+
+            // Add active class to clicked button
+            document.getElementById(btnId).classList.add('active-button');
+
+            // Scroll to output section
+            document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+        }
+
         async function runLexical() {
             const code = editor.getValue();
             if (!code.trim()) {
@@ -135,7 +158,7 @@
                 `;
                     tbody.appendChild(row);
                 });
-                document.getElementById('syntaxOutput').textContent = '';
+                highlightButtonAndScroll('btnLexical', 'lexicalOp');
             } else {
                 alert('Lexical Analysis Error:\n' + (data.error || 'Unknown Error'));
             }
@@ -160,8 +183,7 @@
 
             if (res.ok) {
                 document.getElementById('syntaxOutput').textContent = data.syntax_output;
-                document.getElementById('tokens').textContent = '';
-                document.getElementById('symbolTable').textContent = '';
+                highlightButtonAndScroll('btnSyntax', 'syntaxOp');
             } else {
                 alert('Syntax Analysis Error:\n' + (data.error || 'Unknown Error') + '\n' + (data.details || ''));
             }
@@ -194,6 +216,7 @@
                 `;
                 tbody.appendChild(tr);
                 });
+                highlightButtonAndScroll('btnSemantic', 'semanticOp');
             } else {
                 alert('Semantic Analysis Error:\n' + (data.error || 'Unknown'));
             }
@@ -210,10 +233,9 @@
             const data = await res.json();
 
             if (res.ok) {
-                // set the <img> src to the returned URL,
-                // and bust cache with a timestamp query
                 const img = document.getElementById('parseTreeImg');
                 img.src = data.parse_tree_url + '?t=' + new Date().getTime();
+                highlightButtonAndScroll('btnParseTree', 'parseOp');
             } else {
                 alert('Parse-Tree Error:\n' + (data.error || 'Unknown'));
             }

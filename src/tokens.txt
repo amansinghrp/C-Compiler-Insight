@@ -14,82 +14,21 @@ a	Identifier	7
 =	Operator	7
 3	Constant	7
 ;	Special Character	7
+while	Keyword	8
+(	Special Character	8
 a	Identifier	8
-=	Operator	8
-x	Identifier	8
-*	Operator	8
-3	Constant	8
-+	Operator	8
-5	Constant	8
-;	Special Character	8
-if	Keyword	9
-(	Special Character	9
-x	Identifier	9
->	Operator	9
+>	Operator	8
+0	Constant	8
+)	Special Character	8
+{	Special Character	8
 a	Identifier	9
-)	Special Character	9
-{	Special Character	9
-printf	Pre Defined Function	10
-(	Special Character	10
-"	Special Character	10
-Hi	Identifier	10
-!	Operator	10
-"	Special Character	10
-)	Special Character	10
-;	Special Character	10
-a	Identifier	11
-=	Operator	11
-x	Identifier	11
-*	Operator	11
-3	Constant	11
-+	Operator	11
-100	Constant	11
+=	Operator	9
+a	Identifier	9
+-	Operator	9
+1	Constant	9
+;	Special Character	9
+}	Special Character	10
+return	Keyword	11
+0	Constant	11
 ;	Special Character	11
-if	Keyword	12
-(	Special Character	12
-x	Identifier	12
->	Operator	12
-a	Identifier	12
-)	Special Character	12
-{	Special Character	12
-printf	Pre Defined Function	13
-(	Special Character	13
-"	Special Character	13
-Hi	Identifier	13
-!	Operator	13
-"	Special Character	13
-)	Special Character	13
-;	Special Character	13
-a	Identifier	14
-=	Operator	14
-x	Identifier	14
-*	Operator	14
-3	Constant	14
-+	Operator	14
-100	Constant	14
-;	Special Character	14
-}	Special Character	15
-else	Keyword	16
-{	Special Character	16
-x	Identifier	17
-=	Operator	17
-a	Identifier	17
-*	Operator	17
-3	Constant	17
-+	Operator	17
-100	Constant	17
-;	Special Character	17
-}	Special Character	18
-}	Special Character	19
-else	Keyword	20
-{	Special Character	20
-x	Identifier	21
-=	Operator	21
-a	Identifier	21
-*	Operator	21
-3	Constant	21
-+	Operator	21
-100	Constant	21
-;	Special Character	21
-}	Special Character	22
-}	Special Character	23
+}	Special Character	12

@@ -1,1 +1,3 @@
-Semantic analysis completed with no errors
+Semantic analysis completed with 1 error(s)
+	- Line 8: Variable "while" not declared!
+
