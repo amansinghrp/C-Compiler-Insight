@@ -12,22 +12,27 @@ It covers the following compilation stages:
 
 This helps users understand how raw source code is tokenized, parsed, semantically checked, and structured into a visual parse tree.
 
-💡 Features
+💡 Features:
+
     ✅ Lexical Analysis: Generates tokens from source code and builds a symbol table.
     ✅ Syntax Analysis: Uses grammar rules to check for syntactical correctness.
     ✅ Parse Tree Visualization: Generates .dot and .png files to represent the parse tree.
     ✅ Semantic Analysis: Checks for undeclared variables and type mismatches.
     🧾 Symbol Table Export: Outputs to .csv and .json.
 
-🧰 Technologies Used
+🧰 Technologies Used:
+
     Languages: C/C++, Python, Javascript
+
     Tools:
+
         Lex (Lexical Analyzer)
         bison or yacc (Parser Generator)
         Graphviz (Parse Tree Visualization)
         File Formats: .json, .dot, .png
 
-    🛠 Installation Instructions
+    🛠 Installation Instructions:
+    
         Prerequisites:
             GCC Compiler
             flex and bison installed
@@ -86,27 +91,28 @@ This helps users understand how raw source code is tokenized, parsed, semantical
         semantic.txt for errors
         symbol_table_semantic.json
 
-🗃 Project Structure
+🗃 Project Structure:
+
     src/
-    ├── 1_Lexical/
-    │   ├── iflex.l
-    │   ├── symbol_table.c/.h/.json
-    │   ├── test.c
-    │   └── tokens.txt
-    ├── 2_Syntax/
-    │   ├── parser.y
-    │   ├── parser.l
-    │   └── test.c
-    ├── 3_Semantic/
-    │   ├── parser.y
-    │   ├── lexer.l
-    │   ├── input.c
-    │   └── semantic.txt
-    ├── 4_ParseTree/
-    │   ├── parser.y
-    │   ├── lexer.l
-    │   ├── parse_tree.dot/.png
-    │   └── input.c
+        ├── 1_Lexical/
+        │   ├── iflex.l
+        │   ├── symbol_table.c/.h/.json
+        │   ├── test.c
+        │   └── tokens.txt
+        ├── 2_Syntax/
+        │   ├── parser.y
+        │   ├── parser.l
+        │   └── test.c
+        ├── 3_Semantic/
+        │   ├── parser.y
+        │   ├── lexer.l
+        │   ├── input.c
+        │   └── semantic.txt
+        ├── 4_ParseTree/
+        │   ├── parser.y
+        │   ├── lexer.l
+        │   ├── parse_tree.dot/.png
+        │   └── input.c
 
 📄 Example Input / Output
 Example Input (test.c):
