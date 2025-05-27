@@ -32,7 +32,7 @@ This helps users understand how raw source code is tokenized, parsed, semantical
         File Formats: .json, .dot, .png
 
     🛠 Installation Instructions:
-    
+
         Prerequisites:
             GCC Compiler
             flex and bison installed
@@ -113,6 +113,10 @@ This helps users understand how raw source code is tokenized, parsed, semantical
         │   ├── lexer.l
         │   ├── parse_tree.dot/.png
         │   └── input.c
+        ├── bin/
+        ├── static/
+        ├── templates/
+        ├── server.py
 
 📄 Example Input / Output
 Example Input (test.c):
